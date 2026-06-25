@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Elevate — AI agents for the businesses that need them most</title>
+<meta name="description" content="Elevate builds simple, ready-to-use AI agents that take over the repetitive work of small and traditional businesses — invoices, reports, follow-ups and more. We also build custom agents for your exact workflow.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231c2618'/%3E%3Cpath d='M16 7c-5 2-7 6-7 10 5-1 8-4 7-10z' fill='%23d9b85e'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+ --ink:#1c2618; --forest:#33503a; --paper:#f3f0e7; --paper2:#ece8da; --card:#fbfaf4;
+ --text:#20251b; --muted:#5e6651; --gold:#a9781f; --gold-bright:#d9b85e; --line:#ddd9c9;
+ --serif:'Fraunces',Georgia,serif; --sans:'Hanken Grotesk',system-ui,-apple-system,Arial,sans-serif;
+ --maxw:1180px; --r:16px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--paper);color:var(--text);font-family:var(--sans);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;
+ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E")}
+a{color:inherit;text-decoration:none}
+img{max-width:100%}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
+.eyebrow{font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:700;display:flex;align-items:center;gap:10px}
+.eyebrow .num{font-family:var(--serif);font-weight:500}
+h1,h2,h3{font-family:var(--serif);font-weight:500;letter-spacing:-.02em;line-height:1.04;color:var(--ink);margin:0}
+h1{font-size:clamp(2.7rem,6.4vw,5.1rem)}
+h2{font-size:clamp(1.9rem,3.8vw,3rem)}
+h3{font-size:1.22rem;letter-spacing:-.01em}
+p{margin:0}
+.lead{font-size:clamp(1.05rem,1.6vw,1.3rem);color:var(--muted);max-width:60ch}
+.btn{display:inline-flex;align-items:center;gap:9px;font-weight:600;font-size:1rem;padding:14px 24px;border-radius:100px;border:1px solid transparent;cursor:pointer;transition:transform .15s ease,background .15s ease,border-color .15s ease;min-height:48px}
+.btn.primary{background:var(--ink);color:#f3f0e7}
+.btn.primary:hover{transform:translateY(-2px);background:#243321}
+.btn.ghost{border-color:var(--line);background:transparent;color:var(--ink)}
+.btn.ghost:hover{border-color:var(--ink)}
+.btn.gold{background:var(--gold-bright);color:#241c08}
+.btn.gold:hover{transform:translateY(-2px);filter:brightness(1.04)}
+a:focus-visible,.btn:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:8px}
+.hr{height:1px;background:var(--line);border:0;margin:0}
+
+/* nav */
+header{position:fixed;top:0;left:0;right:0;z-index:50;transition:background .3s ease,box-shadow .3s ease,border-color .3s}
+header .bar{display:flex;align-items:center;justify-content:space-between;padding:18px 0}
+header.scrolled{background:rgba(243,240,231,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.logo{font-family:var(--serif);font-weight:600;font-size:1.45rem;letter-spacing:-.02em;color:var(--ink);display:flex;align-items:center;gap:9px}
+.logo .mk{width:26px;height:26px;border-radius:7px;background:var(--ink);display:grid;place-items:center}
+.nav-links{display:flex;align-items:center;gap:30px}
+.nav-links a.lnk{font-size:.95rem;color:var(--ink);font-weight:500;opacity:.8}
+.nav-links a.lnk:hover{opacity:1}
+.menu-btn{display:none;background:none;border:0;cursor:pointer;padding:8px}
+.menu-btn svg{width:26px;height:26px}
+
+/* hero */
+.hero{padding:170px 0 90px}
+.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:54px;align-items:center}
+.hero h1{margin:18px 0 24px}
+.hero .lead{margin-bottom:34px}
+.hero-cta{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.hero-note{margin-top:26px;font-size:.92rem;color:var(--muted);display:flex;align-items:center;gap:9px}
+.dot{width:8px;height:8px;border-radius:50%;background:#3f8a4e;box-shadow:0 0 0 4px rgba(63,138,78,.16)}
+/* hero visual: a live-agent panel */
+.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:0 22px 50px -28px rgba(28,38,24,.4);overflow:hidden}
+.panel .ph{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--line);background:var(--paper2)}
+.panel .ph .t{font-weight:700;font-size:.9rem;letter-spacing:.02em}
+.tagpill{font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--forest);background:#e2ead7;padding:4px 10px;border-radius:100px;font-weight:700}
+.panel .pb{padding:20px 18px}
+.qrow{font-size:.95rem;color:var(--muted);margin-bottom:6px}
+.arow{font-family:var(--serif);font-size:1.45rem;color:var(--ink);letter-spacing:-.01em;margin-bottom:16px}
+.minirow{display:flex;justify-content:space-between;padding:9px 0;border-top:1px dashed var(--line);font-size:.9rem}
+.minirow b{font-weight:700;color:var(--ink)}
+
+/* 3D hero */
+.hero3d{position:relative;height:390px;border-radius:18px;overflow:hidden;background:radial-gradient(130% 130% at 72% 18%,#26371f,#0f140d);border:1px solid rgba(217,184,94,.2);box-shadow:0 32px 64px -32px rgba(16,22,14,.65);will-change:transform}
+.hero3d canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.hero3d .cap{position:absolute;left:18px;top:16px;z-index:2;color:#d9b85e;font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;font-weight:700;display:flex;align-items:center;gap:8px}
+.hero3d .cap .pdot{width:7px;height:7px;border-radius:50%;background:#86d093;box-shadow:0 0 12px #86d093;animation:pulse 2.4s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.floatcard{position:absolute;right:16px;bottom:16px;z-index:2;background:rgba(251,250,244,.94);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.55);border-radius:13px;padding:13px 17px;box-shadow:0 18px 34px -18px rgba(0,0,0,.55);transition:transform .2s ease;will-change:transform}
+.floatcard .big{font-family:var(--serif);font-size:1.35rem;color:var(--ink);line-height:1}
+.floatcard .sm{font-size:.76rem;color:var(--muted);margin-top:3px}
+.acard,.hero3d{transition:transform .25s cubic-bezier(.2,.7,.2,1),box-shadow .2s ease}
+
+/* generic section */
+section{padding:84px 0}
+.sec-head{max-width:62ch;margin-bottom:46px}
+.sec-head h2{margin-top:14px}
+
+/* problem */
+.problem{background:var(--ink);color:#e9ecdf}
+.problem h2{color:#f3f0e7;max-width:18ch}
+.problem .eyebrow{color:var(--gold-bright)}
+.problem .lead{color:#b9c2ad;margin-top:22px}
+.problem .pts{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;margin-top:54px;border-top:1px solid rgba(255,255,255,.14);padding-top:34px}
+.problem .pts .n{font-family:var(--serif);color:var(--gold-bright);font-size:1.1rem}
+.problem .pts h3{color:#f3f0e7;font-size:1.1rem;margin:10px 0 8px}
+.problem .pts p{color:#aab39e;font-size:.96rem}
+
+/* agents grid */
+.agrid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.acard{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:26px 24px 28px;transition:transform .18s ease,box-shadow .18s ease}
+.acard:hover{transform:translateY(-4px);box-shadow:0 18px 40px -26px rgba(28,38,24,.45)}
+.acard .ic{width:42px;height:42px;border-radius:11px;border:1px solid var(--line);display:grid;place-items:center;color:var(--forest);margin-bottom:18px}
+.acard .ic svg{width:22px;height:22px}
+.acard h3{margin-bottom:8px}
+.acard p{color:var(--muted);font-size:.96rem}
+.custom-band{margin-top:18px;background:var(--ink);color:#f3f0e7;border-radius:var(--r);padding:30px 34px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
+.custom-band h3{color:#f3f0e7;font-size:1.5rem;max-width:22ch}
+.custom-band p{color:#b9c2ad;margin-top:6px;max-width:46ch;font-size:.98rem}
+
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid var(--line)}
+.step{padding:34px 30px 30px;border-right:1px solid var(--line)}
+.step:last-child{border-right:0}
+.step .n{font-family:var(--serif);font-size:2.4rem;color:var(--gold);line-height:1}
+.step h3{margin:16px 0 10px}
+.step p{color:var(--muted);font-size:.97rem}
+
+/* work */
+.work{background:var(--paper2)}
+.feature{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;display:grid;grid-template-columns:1fr 1fr}
+.feature .left{padding:40px 40px 44px;border-right:1px solid var(--line)}
+.feature .label{font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:700}
+.feature h3{font-size:2rem;margin:12px 0 6px}
+.feature .sub{color:var(--muted);font-style:italic;margin-bottom:22px}
+.feature .tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px}
+.tag{font-size:.74rem;border:1px solid var(--line);color:var(--forest);border-radius:100px;padding:5px 12px;font-weight:600}
+.feature .right{padding:40px}
+.qa{margin-bottom:22px}
+.qa .q{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:7px}
+.qa p{color:var(--text);font-size:1rem}
+
+/* who */
+.who .row{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+.who .row span{border:1px solid var(--line);background:var(--card);border-radius:100px;padding:11px 20px;font-weight:600;font-size:.98rem}
+
+/* CTA */
+.cta{background:var(--forest);color:#f1f4ea;text-align:center}
+.cta h2{color:#f6f3ea;max-width:20ch;margin:0 auto 14px}
+.cta p{color:#cdd6c2;margin-bottom:30px}
+.cta .eyebrow{justify-content:center;color:var(--gold-bright)}
+
+/* footer */
+footer{background:var(--ink);color:#aab39e;padding:60px 0 40px}
+footer .grid{display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap;align-items:flex-start}
+footer .logo{color:#f3f0e7;margin-bottom:10px}
+footer a.fmail{color:var(--gold-bright);font-weight:600}
+footer .copy{margin-top:40px;padding-top:22px;border-top:1px solid rgba(255,255,255,.12);font-size:.85rem;color:#8c947f;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}
+
+/* reveal animation */
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
+
+/* responsive */
+@media (max-width:900px){
+ .hero-grid{grid-template-columns:1fr;gap:40px}
+ .problem .pts{grid-template-columns:1fr}
+ .agrid{grid-template-columns:1fr 1fr}
+ .steps{grid-template-columns:1fr}
+ .step{border-right:0;border-bottom:1px solid var(--line)}
+ .step:last-child{border-bottom:0}
+ .feature{grid-template-columns:1fr}
+ .feature .left{border-right:0;border-bottom:1px solid var(--line)}
+}
+@media (max-width:620px){
+ body{font-size:16px}
+ .wrap{padding:0 20px}
+ .hero{padding:130px 0 64px}
+ section{padding:62px 0}
+ .nav-links{display:none}
+ .nav-links.open{display:flex;position:fixed;inset:64px 0 auto 0;flex-direction:column;background:var(--paper);border-bottom:1px solid var(--line);padding:18px 20px;gap:18px;align-items:flex-start}
+ .nav-links.open .btn{width:100%;justify-content:center}
+ .menu-btn{display:block}
+ .agrid{grid-template-columns:1fr}
+ .custom-band,.feature .right,.feature .left{padding:26px}
+}
+</style>
+</head>
+<body>
+
+<header id="hdr">
+ <div class="wrap bar">
+  <a class="logo" href="#top" aria-label="Elevate home"><span class="mk"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 4C7 7 5 12 6 18c6-1 9-6 8-14z" fill="#d9b85e"/></svg></span>Elevate</a>
+  <nav class="nav-links" id="nav">
+   <a class="lnk" href="#agents">Agents</a>
+   <a class="lnk" href="#how">How it works</a>
+   <a class="lnk" href="#work">Work</a>
+   <a class="lnk" href="#contact">Contact</a>
+   <a class="btn ghost" href="mailto:shivank@bhatkawa.com?subject=Elevate%20%E2%80%94%20Let%27s%20talk">Book a call</a>
+  </nav>
+  <button class="menu-btn" id="menuBtn" aria-label="Menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="#1c2618" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+ </div>
+</header>
+
+<main id="top">
+
+<!-- HERO -->
+<section class="hero">
+ <div class="wrap hero-grid">
+  <div class="reveal">
+   <div class="eyebrow"><span class="num">01</span> AI agents for everyday businesses</div>
+   <h1>Give your business its own AI workforce.</h1>
+   <p class="lead">Elevate builds simple AI agents that quietly handle the boring, repetitive work — invoices, reports, follow-ups and more — so your people get back to what actually grows the business.</p>
+   <div class="hero-cta">
+    <a class="btn primary" href="mailto:shivank@bhatkawa.com?subject=Elevate%20%E2%80%94%20Book%20a%20call">Book a free call →</a>
+    <a class="btn ghost" href="#agents">See what they do</a>
+   </div>
+   <div class="hero-note"><span class="dot"></span> Already running for a 115-year-old listed company.</div>
+  </div>
+  <div class="reveal" aria-hidden="true">
+   <div class="hero3d" id="hero3d">
+    <canvas id="net"></canvas>
+    <div class="cap"><span class="pdot"></span>Agents · working together</div>
+    <div class="floatcard"><div class="big">1.2s</div><div class="sm">to search 268 documents</div></div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="problem">
+ <div class="wrap">
+  <div class="sec-head reveal">
+   <div class="eyebrow"><span class="num">02</span> The problem</div>
+   <h2>The businesses that need AI most are the ones being left behind.</h2>
+   <p class="lead">Most small and traditional businesses still run on paper. Invoices, records, reports and daily decisions are done by hand — slow, error-prone, and a waste of good people’s time. They know AI could help, but today’s tools are built for big tech: too expensive and too complex.</p>
+  </div>
+  <div class="pts reveal">
+   <div><div class="n">01</div><h3>Run on paper</h3><p>Registers, invoices and reports filled in by hand, scattered across email and WhatsApp.</p></div>
+   <div><div class="n">02</div><h3>Costly mistakes</h3><p>Small manual errors in wages, billing and pricing add up to real money lost.</p></div>
+   <div><div class="n">03</div><h3>Locked out of AI</h3><p>Enterprise software is built for big companies — too pricey and complicated for them.</p></div>
+  </div>
+ </div>
+</section>
+
+<!-- AGENTS -->
+<section id="agents">
+ <div class="wrap">
+  <div class="sec-head reveal">
+   <div class="eyebrow"><span class="num">03</span> What our agents do</div>
+   <h2>One agent, one job — done the same way, every day.</h2>
+  </div>
+  <div class="agrid">
+   <div class="acard reveal"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4M9 13h6M9 17h6M9 9h2"/></svg></div><h3>Invoice &amp; bill organiser</h3><p>Turns a pile of messy invoices into one clean, GST-ready table.</p></div>
+   <div class="acard reveal"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div><h3>Payment chaser</h3><p>Tracks who owes you money and sends polite reminders on time.</p></div>
+   <div class="acard reveal"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M5 4h14v16H5z"/><path d="M8 9h8M8 13h8M8 17h5"/></svg></div><h3>Report summariser</h3><p>Turns daily registers and reports into a few clear lines.</p></div>
+   <div class="acard reveal"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="11" cy="11" r="7"/><path d="M16 16l4 4"/></svg></div><h3>Document finder</h3><p>Instant answers pulled straight from your own paperwork.</p></div>
+   <div class="acard reveal"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 6h18v12H3z"/><path d="M3 7l9 6 9-6"/></svg></div><h3>Email assistant</h3><p>Sorts the inbox and drafts replies to routine enquiries.</p></div>
+   <div class="acard reveal"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 7l8-4 8 4v10l-8 4-8-4z"/><path d="M4 7l8 4 8-4M12 11v10"/></svg></div><h3>Stock tracker</h3><p>Keeps an eye on stock and warns before you run low.</p></div>
+  </div>
+  <div class="custom-band reveal">
+   <div><h3>Need something we don’t list?</h3><p>We build fully custom AI agents designed around your exact, one-of-a-kind workflow.</p></div>
+   <a class="btn gold" href="mailto:shivank@bhatkawa.com?subject=Elevate%20%E2%80%94%20Custom%20agent">Tell us what you need →</a>
+  </div>
+ </div>
+</section>
+
+<hr class="hr">
+
+<!-- HOW -->
+<section id="how">
+ <div class="wrap">
+  <div class="sec-head reveal">
+   <div class="eyebrow"><span class="num">04</span> How it works</div>
+   <h2>Set up for you. Nothing technical needed.</h2>
+  </div>
+  <div class="steps reveal">
+   <div class="step"><div class="n">1</div><h3>Tell us the boring work</h3><p>The repetitive jobs eating your team’s time — or a custom task you have in mind.</p></div>
+   <div class="step"><div class="n">2</div><h3>We build &amp; set it up</h3><p>We build the agent, connect it to how you already work, and get it running.</p></div>
+   <div class="step"><div class="n">3</div><h3>It runs, we maintain</h3><p>A simple setup fee and a small monthly plan — we keep it running and improving.</p></div>
+  </div>
+ </div>
+</section>
+
+<!-- WORK -->
+<section id="work" class="work">
+ <div class="wrap">
+  <div class="sec-head reveal">
+   <div class="eyebrow"><span class="num">05</span> Our work</div>
+   <h2>We’ve already done it — for real.</h2>
+  </div>
+  <div class="feature reveal">
+   <div class="left">
+    <div class="label">Featured project</div>
+    <h3>Bhatkawa Tea Industries</h3>
+    <div class="sub">A 115-year-old listed tea company in the Dooars (est. 1911).</div>
+    <p>Every batch of tea was valued by hand, combining five separate tasting reports from brokers and the garden — arriving by email, WhatsApp, PDFs and handwritten notes. We built an AI agent that reads them all, values each lot, learns which expert predicts prices best, and shows exactly which buyers to target.</p>
+    <div class="tags"><span class="tag">AI agent</span><span class="tag">Email · WhatsApp · PDF</span><span class="tag">Price intelligence</span><span class="tag">Buyer analysis</span></div>
+   </div>
+   <div class="right">
+    <div class="qa"><div class="q">The problem</div><p>Hours of manual work to price each batch, with no way to know which expert was most accurate.</p></div>
+    <div class="qa"><div class="q">What we built</div><p>One agent that combines every report into a single smart valuation and surfaces the best buyers.</p></div>
+    <div class="qa"><div class="q">The result</div><p>Work that took hours now happens in seconds — sharper pricing, and a clear view of who to sell to.</p></div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- WHO -->
+<section id="who" class="who">
+ <div class="wrap">
+  <div class="sec-head reveal">
+   <div class="eyebrow"><span class="num">06</span> Who it’s for</div>
+   <h2>Built for the businesses drowning in paperwork.</h2>
+   <div class="row">
+    <span>Tea estates</span><span>Mills &amp; factories</span><span>Traders &amp; exporters</span><span>Manufacturers</span><span>Family businesses</span><span>CA &amp; professional firms</span><span>Small businesses</span>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- CTA -->
+<section id="contact" class="cta">
+ <div class="wrap reveal">
+  <div class="eyebrow"><span class="num">07</span> Get started</div>
+  <h2>Ready to put AI to work in your business?</h2>
+  <p>Tell us the boring work. We’ll show you what an agent can do — free.</p>
+  <a class="btn gold" href="mailto:shivank@bhatkawa.com?subject=Elevate%20%E2%80%94%20Book%20a%20free%20call">Book a free call →</a>
+ </div>
+</section>
+
+</main>
+
+<footer>
+ <div class="wrap">
+  <div class="grid">
+   <div>
+    <div class="logo"><span class="mk" style="background:#33503a"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 4C7 7 5 12 6 18c6-1 9-6 8-14z" fill="#d9b85e"/></svg></span>Elevate</div>
+    <p style="max-width:34ch">AI agents for the businesses that need them most.</p>
+   </div>
+   <div>
+    <p style="color:#f3f0e7;font-weight:600;margin-bottom:8px">Get in touch</p>
+    <p><a class="fmail" href="mailto:shivank@bhatkawa.com">shivank@bhatkawa.com</a></p>
+    <p style="margin-top:6px">Shivank Jalan, Founder</p>
+   </div>
+  </div>
+  <div class="copy"><span>© 2026 Elevate</span><span>Kolkata, India</span></div>
+ </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+// nav scroll state
+const hdr=document.getElementById('hdr');
+const onScroll=()=>hdr.classList.toggle('scrolled',window.scrollY>20);
+onScroll();addEventListener('scroll',onScroll,{passive:true});
+// mobile menu
+const mb=document.getElementById('menuBtn'),nav=document.getElementById('nav');
+mb.addEventListener('click',()=>{const o=nav.classList.toggle('open');mb.setAttribute('aria-expanded',o)});
+nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{nav.classList.remove('open');mb.setAttribute('aria-expanded','false')}));
+// reveal on scroll
+const els=document.querySelectorAll('.reveal');
+if(matchMedia('(prefers-reduced-motion:reduce)').matches){els.forEach(e=>e.classList.add('in'))}
+else{const io=new IntersectionObserver((en)=>{en.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('in'),i*60);io.unobserve(e.target)}})},{threshold:.12,rootMargin:'0px 0px -8% 0px'});els.forEach(e=>io.observe(e))}
+
+const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+// 3D agent network in the hero
+(function(){
+ const c=document.getElementById('net');
+ if(!c||!window.THREE||reduce) return;
+ const renderer=new THREE.WebGLRenderer({canvas:c,antialias:true,alpha:true});
+ renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+ const scene=new THREE.Scene();
+ const cam=new THREE.PerspectiveCamera(55,1,0.1,100); cam.position.z=15;
+ const group=new THREE.Group(); scene.add(group);
+ const N=64, pts=[];
+ for(let i=0;i<N;i++) pts.push(new THREE.Vector3((Math.random()-.5)*17,(Math.random()-.5)*12,(Math.random()-.5)*10));
+ const pg=new THREE.BufferGeometry().setFromPoints(pts);
+ group.add(new THREE.Points(pg,new THREE.PointsMaterial({color:0xd9b85e,size:.3,transparent:true,opacity:.95})));
+ const lp=[];
+ for(let a=0;a<N;a++)for(let b=a+1;b<N;b++){if(pts[a].distanceTo(pts[b])<4.3){lp.push(pts[a].x,pts[a].y,pts[a].z,pts[b].x,pts[b].y,pts[b].z);}}
+ const lg=new THREE.BufferGeometry(); lg.setAttribute('position',new THREE.Float32BufferAttribute(lp,3));
+ group.add(new THREE.LineSegments(lg,new THREE.LineBasicMaterial({color:0x7ea876,transparent:true,opacity:.34})));
+ let mx=0,my=0;
+ const host=document.getElementById('hero3d');
+ host.addEventListener('mousemove',e=>{const r=host.getBoundingClientRect();mx=((e.clientX-r.left)/r.width-.5);my=((e.clientY-r.top)/r.height-.5);});
+ host.addEventListener('mouseleave',()=>{mx=0;my=0;});
+ function size(){const w=c.clientWidth,h=c.clientHeight;renderer.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix();}
+ size(); addEventListener('resize',size);
+ (function loop(){requestAnimationFrame(loop);
+  group.rotation.y+=0.0017; group.rotation.x=Math.sin(Date.now()*0.00018)*0.16;
+  cam.position.x+=((mx*5)-cam.position.x)*0.045; cam.position.y+=((-my*5)-cam.position.y)*0.045; cam.lookAt(0,0,0);
+  renderer.render(scene,cam);})();
+})();
+
+// 3D tilt on cards + float card
+function tilt(el,max,lift){
+ el.addEventListener('mousemove',e=>{const r=el.getBoundingClientRect();
+  const rx=(((e.clientY-r.top)/r.height)-.5)*-2*max, ry=(((e.clientX-r.left)/r.width)-.5)*2*max;
+  el.style.transform='perspective(820px) rotateX('+rx+'deg) rotateY('+ry+'deg)'+(lift?' translateY(-5px)':'');});
+ el.addEventListener('mouseleave',()=>{el.style.transform='';});
+}
+if(!reduce){
+ document.querySelectorAll('.acard').forEach(c=>tilt(c,6,true));
+ const fc=document.querySelector('.floatcard'); if(fc) tilt(fc,10,false);
+ const h3=document.getElementById('hero3d'); if(h3) tilt(h3,4,false);
+}
+</script>
+</body>
+</html>
