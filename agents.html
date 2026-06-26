@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agents — Elevate</title>
+<meta name="description" content="The Elevate agent line-up: invoice organiser, payment chaser, report summariser, document finder, email assistant, stock tracker, payroll helper, price analyst, compliance watcher — plus fully custom agents.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231c2618'/%3E%3Cpath d='M16 7c-5 2-7 6-7 10 5-1 8-4 7-10z' fill='%23d9b85e'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header id="hdr">
+ <div class="wrap bar">
+  <a class="logo" href="index.html" aria-label="Elevate home"><span class="mk"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 4C7 7 5 12 6 18c6-1 9-6 8-14z" fill="#d9b85e"/></svg></span>Elevate</a>
+  <nav class="nav-links" id="nav">
+   <a class="lnk active" href="agents.html">Agents</a>
+   <a class="lnk" href="how.html">How it works</a>
+   <a class="lnk" href="contact.html">Contact</a>
+   <a class="btn ghost" href="#" onclick="openChat();return false">Chat with an expert</a>
+  </nav>
+  <button class="menu-btn" id="menuBtn" aria-label="Menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="#1c2618" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+ </div>
+</header>
+
+<main>
+
+<section class="pagetop">
+ <div class="wrap">
+  <div class="sec-head reveal">
+   <div class="eyebrow"><span class="num">01</span> What our agents do</div>
+   <h2>One agent, one job — done the same way, every day.</h2>
+   <p class="lead">Each Elevate agent is a tireless office helper that does one job perfectly. Mix and match the ones you need — or ask us for a custom one.</p>
+  </div>
+  <div class="agrid">
+   <div class="acard reveal"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4M9 13h6M9 17h6M9 9h2"/></svg></div><h3>Invoice &amp; bill organiser</h3><p>Reads a pile of messy invoices and bills — PDFs, photos, scans — and turns them into one clean, GST-ready table you can actually use.</p><button class="more" onclick="askAgent('Invoice &amp; bill organiser')">Ask about this agent →</button></div>
+   <div class="acard reveal"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div><h3>Payment chaser</h3><p>Tracks exactly who owes you money and how long it’s overdue, then sends polite, on-time reminders so you get paid faster — without the awkward calls.</p><button class="more" onclick="askAgent('Payment chaser')">Ask about this agent →</button></div>
+   <div class="acard reveal"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M5 4h14v16H5z"/><path d="M8 9h8M8 13h8M8 17h5"/></svg></div><h3>Report summariser</h3><p>Turns long daily registers, reports and notes into a few clear lines — so you know what happened without reading ten pages.</p><button class="more" onclick="askAgent('Report summariser')">Ask about this agent →</button></div>
+   <div class="acard reveal"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="11" cy="11" r="7"/><path d="M16 16l4 4"/></svg></div><h3>Document finder</h3><p>Ask a question in plain language and get an instant answer pulled straight from years of your own paperwork — no more digging through folders.</p><button class="more" onclick="askAgent('Document finder')">Ask about this agent →</button></div>
+   <div class="acard reveal"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 6h18v12H3z"/><path d="M3 7l9 6 9-6"/></svg></div><h3>Email &amp; enquiry assistant</h3><p>Sorts the inbox, flags what matters, and drafts ready-to-send replies to routine enquiries — so nothing slips and nobody waits.</p><button class="more" onclick="askAgent('Email &amp; enquiry assistant')">Ask about this agent →</button></div>
+   <div class="acard reveal"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 7l8-4 8 4v10l-8 4-8-4z"/><path d="M4 7l8 4 8-4M12 11v10"/></svg></div><h3>Stock &amp; reorder tracker</h3><p>Keeps an eye on stock levels and warns you before you run low — and can draft the reorder so you never lose a sale.</p><button class="more" onclick="askAgent('Stock &amp; reorder tracker')">Ask about this agent →</button></div>
+   <div class="acard reveal"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3v18M5 8h14M5 16h14"/><circle cx="12" cy="12" r="9"/></svg></div><h3>Wages &amp; payroll helper</h3><p>Adds up attendance, overtime and advances into a clean monthly wage sheet — fewer errors, no late nights with a calculator.</p><button class="more" onclick="askAgent('Wages &amp; payroll helper')">Ask about this agent →</button></div>
+   <div class="acard reveal"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 13l4-4 4 4 4-6 6 7"/><path d="M3 20h18"/></svg></div><h3>Price &amp; quote analyst</h3><p>Pulls together rates, costs and past deals so you can price a job or a batch in seconds — with a clear view of your margin.</p><button class="more" onclick="askAgent('Price &amp; quote analyst')">Ask about this agent →</button></div>
+   <div class="acard reveal"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M4 9h16M9 9v11"/></svg></div><h3>Compliance &amp; renewals watcher</h3><p>Remembers every licence, GST filing, and renewal date, and nudges you well before the deadline — so you’re never caught out.</p><button class="more" onclick="askAgent('Compliance &amp; renewals watcher')">Ask about this agent →</button></div>
+  </div>
+  <div class="custom-band reveal">
+   <div><h3>Need something we don’t list?</h3><p>Most of our best work is custom. Tell us the exact job that eats your team’s time and we’ll build an agent designed around your one-of-a-kind workflow.</p></div>
+   <a class="btn gold" href="#" onclick="askAgent('a custom agent');return false">Request a custom agent →</a>
+  </div>
+ </div>
+</section>
+
+<section class="cta">
+ <div class="wrap reveal">
+  <div class="eyebrow"><span class="num">02</span> Next step</div>
+  <h2>Not sure which agent fits?</h2>
+  <p>Chat with an expert — tell us the boring work, and we’ll point you to the agent that saves you the most time. Free.</p>
+  <a class="btn gold" href="#" onclick="openChat();return false">Chat with an expert →</a>
+ </div>
+</section>
+
+</main>
+
+<footer>
+ <div class="wrap">
+  <div class="grid">
+   <div>
+    <div class="logo"><span class="mk" style="background:#33503a"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 4C7 7 5 12 6 18c6-1 9-6 8-14z" fill="#d9b85e"/></svg></span>Elevate</div>
+    <p style="max-width:34ch">AI agents for the businesses that need them most.</p>
+   </div>
+   <div class="fcol">
+    <p style="color:#f3f0e7;font-weight:600;margin-bottom:8px">Explore</p>
+    <a href="agents.html">Agents</a>
+    <a href="how.html">How it works</a>
+    <a href="contact.html">Contact</a>
+   </div>
+   <div class="fcol">
+    <p style="color:#f3f0e7;font-weight:600;margin-bottom:8px">Get in touch</p>
+    <p><a class="fmail" href="#" onclick="openChat();return false">Chat with an expert</a></p>
+   </div>
+  </div>
+  <div class="copy"><span>© 2026 Elevate</span><span>Kolkata, India</span></div>
+ </div>
+</footer>
+
+<button class="chat-fab" id="chatFab" onclick="openChat()"><span class="av">A</span><span>Chat with an expert</span><span class="pulse"></span></button>
+<div class="chat-win" id="chatWin" role="dialog" aria-label="Chat with an Elevate expert">
+ <div class="chat-head">
+  <div class="av">A</div>
+  <div><div class="nm">Aanya · Elevate</div><div class="st"><span class="d"></span>Usually replies in a minute</div></div>
+  <button class="x" onclick="closeChat()" aria-label="Close chat">&times;</button>
+ </div>
+ <div class="chat-body" id="chatBody"></div>
+ <div class="chat-foot" id="chatFoot"></div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
