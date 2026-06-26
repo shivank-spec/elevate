@@ -389,9 +389,13 @@ mb.addEventListener('click',()=>{const o=nav.classList.toggle('open');mb.setAttr
 nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{nav.classList.remove('open');mb.setAttribute('aria-expanded','false')}));
 // reveal on scroll
 const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
-const els=document.querySelectorAll('.reveal,.rstep');
-if(reduce){els.forEach(e=>e.classList.add('in'))}
-else{const io=new IntersectionObserver((en)=>{en.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('in'),i*60);io.unobserve(e.target)}})},{threshold:.2,rootMargin:'0px 0px -8% 0px'});els.forEach(e=>io.observe(e))}
+const els=document.querySelectorAll('.reveal');
+const steps=document.querySelectorAll('.rstep');
+if(reduce){els.forEach(e=>e.classList.add('in'));steps.forEach(e=>e.classList.add('in'))}
+else{
+ const io=new IntersectionObserver((en)=>{en.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('in'),i*60);io.unobserve(e.target)}})},{threshold:.2,rootMargin:'0px 0px -8% 0px'});els.forEach(e=>io.observe(e));
+ // roadmap steps: reveal one-by-one only once each rises past the middle of the screen — never visible before
+ const sio=new IntersectionObserver((en)=>{en.forEach((e)=>{if(e.isIntersecting){e.target.classList.add('in');sio.unobserve(e.target)}})},{threshold:0,rootMargin:'0px 0px -42% 0px'});steps.forEach(e=>sio.observe(e))}
 
 // roadmap progress line fills as you scroll through it
 const roadwrap=document.getElementById('roadwrap'),roadfill=document.getElementById('roadfill');
