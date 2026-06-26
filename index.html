@@ -178,6 +178,16 @@ footer .copy{margin-top:40px;padding-top:22px;border-top:1px solid rgba(255,255,
  .agrid{grid-template-columns:1fr}
  .custom-band,.feature .right,.feature .left{padding:26px}
 }
+
+/* book-a-call modal */
+.modal-ov{position:fixed;inset:0;z-index:200;background:rgba(20,25,15,.55);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:20px}
+.modal-ov.open{display:flex}
+.modal{background:var(--card);border:1px solid var(--line);border-radius:18px;max-width:440px;width:100%;padding:30px 28px;position:relative;box-shadow:0 30px 70px -20px rgba(0,0,0,.5);max-height:92vh;overflow:auto}
+.modal-x{position:absolute;top:12px;right:14px;background:none;border:0;font-size:1.7rem;line-height:1;color:var(--muted);cursor:pointer}
+.modal h3{font-family:var(--serif)}
+.fl{display:block;font-size:.82rem;font-weight:600;color:var(--ink);margin-bottom:12px}
+.fl input,.fl textarea{display:block;width:100%;margin-top:5px;padding:11px 13px;border:1px solid var(--line);border-radius:10px;font-family:inherit;font-size:.95rem;background:var(--paper);color:var(--text);resize:vertical}
+.fl input:focus,.fl textarea:focus{outline:0;border-color:var(--gold);box-shadow:0 0 0 3px rgba(217,184,94,.25)}
 </style>
 </head>
 <body>
@@ -190,7 +200,7 @@ footer .copy{margin-top:40px;padding-top:22px;border-top:1px solid rgba(255,255,
    <a class="lnk" href="#how">How it works</a>
    <a class="lnk" href="#work">Work</a>
    <a class="lnk" href="#contact">Contact</a>
-   <a class="btn ghost" href="mailto:shivank@bhatkawa.com?subject=Elevate%20%E2%80%94%20Let%27s%20talk">Book a call</a>
+   <a class="btn ghost" href="#" onclick="openBook();return false">Book a call</a>
   </nav>
   <button class="menu-btn" id="menuBtn" aria-label="Menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="#1c2618" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
  </div>
@@ -206,7 +216,7 @@ footer .copy{margin-top:40px;padding-top:22px;border-top:1px solid rgba(255,255,
    <h1>Give your business its own AI workforce.</h1>
    <p class="lead">Elevate builds simple AI agents that quietly handle the boring, repetitive work — invoices, reports, follow-ups and more — so your people get back to what actually grows the business.</p>
    <div class="hero-cta">
-    <a class="btn primary" href="mailto:shivank@bhatkawa.com?subject=Elevate%20%E2%80%94%20Book%20a%20call">Book a free call →</a>
+    <a class="btn primary" href="#" onclick="openBook();return false">Book a free call →</a>
     <a class="btn ghost" href="#agents">See what they do</a>
    </div>
    <div class="hero-note"><span class="dot"></span> Already running for a 115-year-old listed company.</div>
@@ -254,7 +264,7 @@ footer .copy{margin-top:40px;padding-top:22px;border-top:1px solid rgba(255,255,
   </div>
   <div class="custom-band reveal">
    <div><h3>Need something we don’t list?</h3><p>We build fully custom AI agents designed around your exact, one-of-a-kind workflow.</p></div>
-   <a class="btn gold" href="mailto:shivank@bhatkawa.com?subject=Elevate%20%E2%80%94%20Custom%20agent">Tell us what you need →</a>
+   <a class="btn gold" href="#" onclick="openBook();return false">Tell us what you need →</a>
   </div>
  </div>
 </section>
@@ -319,7 +329,7 @@ footer .copy{margin-top:40px;padding-top:22px;border-top:1px solid rgba(255,255,
   <div class="eyebrow"><span class="num">07</span> Get started</div>
   <h2>Ready to put AI to work in your business?</h2>
   <p>Tell us the boring work. We’ll show you what an agent can do — free.</p>
-  <a class="btn gold" href="mailto:shivank@bhatkawa.com?subject=Elevate%20%E2%80%94%20Book%20a%20free%20call">Book a free call →</a>
+  <a class="btn gold" href="#" onclick="openBook();return false">Book a free call →</a>
  </div>
 </section>
 
@@ -341,6 +351,32 @@ footer .copy{margin-top:40px;padding-top:22px;border-top:1px solid rgba(255,255,
   <div class="copy"><span>© 2026 Elevate</span><span>Kolkata, India</span></div>
  </div>
 </footer>
+
+<!-- BOOK A CALL MODAL -->
+<div class="modal-ov" id="bookOv" aria-hidden="true">
+ <div class="modal" role="dialog" aria-modal="true" aria-label="Book a free call">
+  <button class="modal-x" onclick="closeBook()" aria-label="Close">&times;</button>
+  <div id="bookForm">
+   <div class="eyebrow" style="color:var(--gold)">Book a free call</div>
+   <h3 style="font-size:1.6rem;margin:8px 0 4px">Tell us the boring work.</h3>
+   <p style="color:var(--muted);font-size:.95rem;margin-bottom:18px">We’ll show you what an agent can do — free. Nothing technical needed.</p>
+   <form onsubmit="return submitBook(event)">
+    <label class="fl">Full name<input name="fullname" required></label>
+    <label class="fl">Email<input name="email" type="email" required></label>
+    <label class="fl">Phone / WhatsApp<input name="phone" required></label>
+    <label class="fl">Business / company<input name="business"></label>
+    <label class="fl">What do you need help with?<textarea name="need" rows="3"></textarea></label>
+    <button class="btn primary" type="submit" id="bookSubmit" style="width:100%;justify-content:center;margin-top:6px">Send →</button>
+   </form>
+  </div>
+  <div id="bookDone" style="display:none;text-align:center;padding:24px 0 8px">
+   <div style="font-size:2.6rem">✅</div>
+   <h3 style="font-size:1.5rem;margin:10px 0 6px">Thank you!</h3>
+   <p style="color:var(--muted)">We’ve got your details — Shivank will reach out soon.</p>
+   <button class="btn ghost" onclick="closeBook()" style="margin-top:18px">Close</button>
+  </div>
+ </div>
+</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
@@ -399,6 +435,25 @@ if(!reduce){
  document.querySelectorAll('.acard').forEach(c=>tilt(c,6,true));
  const fc=document.querySelector('.floatcard'); if(fc) tilt(fc,10,false);
  const h3=document.getElementById('hero3d'); if(h3) tilt(h3,4,false);
+}
+
+// Book-a-call form -> Google Form -> Google Sheet
+const BOOK_URL="https://docs.google.com/forms/d/e/1FAIpQLScaersGUcbGAZ8l1WjeoUqdUNGypYxm4NMG1qeiTwHbgKmGVQ/formResponse";
+const BOOK_FIELDS={fullname:"entry.1359721641",email:"entry.1597866042",phone:"entry.636808201",business:"entry.1800258224",need:"entry.2140075954"};
+function openBook(){const o=document.getElementById('bookOv');o.classList.add('open');document.getElementById('bookForm').style.display='';document.getElementById('bookDone').style.display='none';}
+function closeBook(){document.getElementById('bookOv').classList.remove('open');}
+document.getElementById('bookOv').addEventListener('click',e=>{if(e.target.id==='bookOv')closeBook();});
+addEventListener('keydown',e=>{if(e.key==='Escape')closeBook();});
+function submitBook(e){
+ e.preventDefault();
+ const f=e.target, btn=document.getElementById('bookSubmit');
+ const data=new URLSearchParams();
+ for(const k in BOOK_FIELDS){data.append(BOOK_FIELDS[k],(f[k]&&f[k].value)||'');}
+ btn.textContent='Sending…'; btn.disabled=true;
+ fetch(BOOK_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:data.toString()})
+  .catch(()=>{})
+  .finally(()=>{document.getElementById('bookForm').style.display='none';document.getElementById('bookDone').style.display='';btn.textContent='Send →';btn.disabled=false;f.reset();});
+ return false;
 }
 </script>
 </body>
