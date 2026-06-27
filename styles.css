@@ -114,7 +114,7 @@ section{padding:84px 0}
 .stat .big{font-family:var(--serif);font-size:2.6rem;color:var(--ink);line-height:1}
 .stat .lab{color:var(--muted);font-size:.95rem;margin-top:8px}
 
-/* who ‚Äî clean even grid of labelled cards */
+/* who — clean even grid of labelled cards */
 .who-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin-top:38px}
 .who-cell{display:flex;align-items:center;gap:13px;border:1px solid var(--line);background:var(--card);border-radius:14px;padding:18px 20px;font-weight:600;font-size:1rem;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
 .who-cell:hover{transform:translateY(-3px);box-shadow:0 16px 32px -24px rgba(28,38,24,.45);border-color:var(--gold-bright)}
@@ -220,3 +220,86 @@ footer .copy{margin-top:40px;padding-top:22px;border-top:1px solid rgba(255,255,
 .chat-form input:focus{outline:0;border-color:var(--gold)}
 .chat-form button{background:var(--ink);color:#f3f0e7;border:0;border-radius:50%;width:42px;height:42px;cursor:pointer;font-size:1.1rem;flex:none}
 @media (max-width:620px){.chat-win{right:0;bottom:0;width:100vw;height:100vh;max-height:100vh;border-radius:0}}
+
+/* ===================== Liquid-glass / glassmorphism upgrade ===================== */
+:root{
+  --glass:rgba(255,255,255,.42);
+  --glass-strong:rgba(255,255,255,.62);
+  --glass-stroke:rgba(255,255,255,.72);
+  --glass-blur:blur(22px) saturate(180%);
+  --glass-shadow:0 16px 46px -18px rgba(28,38,24,.32), inset 0 1px 0 rgba(255,255,255,.65), inset 0 0 0 1px rgba(255,255,255,.18);
+}
+
+/* ambient aurora so the frosted glass has colour to refract */
+body{position:relative}
+body::before{
+  content:"";position:fixed;inset:-25vh -15vw;z-index:-2;pointer-events:none;
+  background:
+    radial-gradient(42vw 42vw at 12% 16%, rgba(134,208,147,.36), transparent 60%),
+    radial-gradient(38vw 38vw at 88% 10%, rgba(217,184,94,.32), transparent 60%),
+    radial-gradient(48vw 48vw at 82% 86%, rgba(51,80,58,.28), transparent 62%),
+    radial-gradient(42vw 42vw at 18% 92%, rgba(192,210,180,.32), transparent 60%);
+  filter:blur(10px);
+  animation:auroraDrift 28s ease-in-out infinite alternate;
+}
+@keyframes auroraDrift{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(-3.5%,2.5%,0) scale(1.1)}}
+@media (prefers-reduced-motion:reduce){body::before{animation:none}}
+
+/* shared frosted-glass surface */
+.acard,.rcard,.stat,.who-cell,.contact-card,.floatcard{
+  background:var(--glass);
+  -webkit-backdrop-filter:var(--glass-blur);
+  backdrop-filter:var(--glass-blur);
+  border:1px solid var(--glass-stroke);
+  box-shadow:var(--glass-shadow);
+  position:relative;
+  overflow:hidden;
+  isolation:isolate;
+}
+/* specular top-edge highlight = the "liquid glass" sheen (kept subtle so text stays crisp) */
+.acard::after,.rcard::after,.stat::after,.contact-card::after,.who-cell::after,.floatcard::after{
+  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:-1;
+  background:linear-gradient(180deg, rgba(255,255,255,.55) 0%, rgba(255,255,255,0) 22%),
+             radial-gradient(120% 60% at 50% -10%, rgba(255,255,255,.4), transparent 70%);
+}
+.acard:hover,.who-cell:hover,.stat:hover{
+  background:var(--glass-strong);
+  box-shadow:0 26px 60px -22px rgba(28,38,24,.4), inset 0 1px 0 rgba(255,255,255,.8), inset 0 0 0 1px rgba(255,255,255,.22);
+}
+
+/* nav: always glassy, stronger when scrolled */
+header.scrolled{background:rgba(243,240,231,.5);-webkit-backdrop-filter:blur(20px) saturate(170%);backdrop-filter:blur(20px) saturate(170%);border-bottom:1px solid var(--glass-stroke)}
+
+/* ghost button -> glass pill */
+.btn.ghost{
+  background:rgba(255,255,255,.34);
+  -webkit-backdrop-filter:blur(12px) saturate(160%);
+  backdrop-filter:blur(12px) saturate(160%);
+  border:1px solid var(--glass-stroke);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.6);
+}
+.btn.ghost:hover{background:rgba(255,255,255,.55);border-color:rgba(255,255,255,.85)}
+
+/* primary CTA: glossy ink with a glass sheen on top */
+.btn.primary{position:relative;overflow:hidden}
+.btn.primary::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.22),transparent 45%);pointer-events:none}
+
+/* chat assistant -> frosted glass */
+.chat-win{
+  background:rgba(251,250,244,.6);
+  -webkit-backdrop-filter:blur(28px) saturate(185%);
+  backdrop-filter:blur(28px) saturate(185%);
+  border:1px solid var(--glass-stroke);
+}
+.chat-body{background:transparent}
+.chat-foot{background:rgba(255,255,255,.28);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-top:1px solid var(--glass-stroke)}
+.qr{background:rgba(255,255,255,.4);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:1px solid var(--glass-stroke)}
+.msg.bot{background:rgba(255,255,255,.5);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:1px solid var(--glass-stroke)}
+.chat-fab{-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);box-shadow:0 18px 40px -16px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.18)}
+
+/* Safari/older fallback: if no backdrop-filter support, use more opaque panels so nothing looks washed out */
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  .acard,.rcard,.stat,.who-cell,.contact-card,.floatcard{background:rgba(251,250,244,.94)}
+  .chat-win{background:rgba(251,250,244,.98)}
+  .btn.ghost{background:rgba(251,250,244,.9)}
+}
