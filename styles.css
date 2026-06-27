@@ -115,8 +115,8 @@ section{padding:84px 0}
 .stat .lab{color:var(--muted);font-size:.95rem;margin-top:8px}
 
 /* who — clean even grid of labelled cards */
-.who-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin-top:38px}
-.who-cell{display:flex;align-items:center;gap:13px;border:1px solid var(--line);background:var(--card);border-radius:14px;padding:18px 20px;font-weight:600;font-size:1rem;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
+.who-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:14px;margin-top:38px}
+.who-cell{flex:1 1 218px;max-width:258px;min-height:92px;display:flex;align-items:center;gap:14px;border:1px solid var(--line);background:var(--card);border-radius:16px;padding:18px 22px;font-weight:600;font-size:1rem;line-height:1.22;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
 .who-cell:hover{transform:translateY(-3px);box-shadow:0 16px 32px -24px rgba(28,38,24,.45);border-color:var(--gold-bright)}
 .who-cell .wic{width:36px;height:36px;border-radius:10px;border:1px solid var(--line);display:grid;place-items:center;color:var(--forest);flex:none;background:var(--paper)}
 .who-cell .wic svg{width:20px;height:20px}
