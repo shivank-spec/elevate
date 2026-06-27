@@ -94,8 +94,10 @@ function afterAnswer(){chips([
  {t:'Yes, let’s do it',f:()=>{bubble('Yes, let’s do it','me');startLead(lastTopic);}},
  {t:'Another question',f:()=>{bubble('Another question','me');menu();}}
 ]);}
-function askAgent(name){lastTopic=name;openChat();if(!started){started=true;}
- setTimeout(()=>{bubble('Great choice. The <b>'+name+'</b> is one people love.','bot');typing(()=>{bubble("I’ll set you up with a free look at it for your business. Quick — what’s your name?");startLead(name,true);},700);},started?0:300);}
+function askAgent(name){lastTopic=name;
+ // open the chat WITHOUT the generic greeting so the custom-agent flow doesn't collide with greet()
+ const fresh=!started;started=true;win.classList.add('open');fab.style.display='none';
+ setTimeout(()=>{bubble('Great choice. The <b>'+name+'</b> is one people love.','bot');typing(()=>{bubble("I’ll set you up with a free look at it for your business. Quick — what’s your name?");startLead(name,true);},700);},fresh?280:0);}
 function startLead(topic,skipName){lastTopic=topic||lastTopic;
  if(!skipName){typing(()=>{bubble("Happy to help with that. Let me grab a couple of quick details so the right person can reach out. What’s your name?");askStage='name';inputRow('Your name…',handleLead);},700);}
  else{askStage='name';inputRow('Your name…',handleLead);}
