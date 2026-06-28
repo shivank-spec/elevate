@@ -1,0 +1,326 @@
+<!doctype html><html lang="en" data-theme="light"><head><meta charset="utf8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Bhatkawa Tea Agent</title>
+<style>
+:root{
+ --sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+ --serif:ui-serif,Georgia,"Times New Roman",serif;
+ --bg:#eef1e6;--panel:#fff;--panel2:#f7f9f0;--ink:#1b2415;--muted:#6e765f;--line:#e4e8d6;
+ --brand:#235437;--brand-d:#143021;--brand-l:#2f6a44;--olive:#7a8b4f;--sage:#9aab6b;--gold:#c2a24a;
+ --red:#bf4630;--ok:#3f8a4e;--cream:#f3f5ea;
+ --bar-top:#6aa06f;--bar-bot:#2f6043;--track:#e7ebda;
+ --sh-sm:0 1px 2px rgba(20,30,10,.06);--sh:0 4px 16px rgba(20,30,10,.09);--sh-lg:0 12px 34px rgba(20,30,10,.14);
+ --r:14px;--r-sm:10px;--r-lg:20px}
+[data-theme=dark]{--bg:#0f1410;--panel:#171f15;--panel2:#1c261a;--ink:#e9eedd;--muted:#9aa589;--line:#283324;
+ --brand:#4f9266;--brand-d:#0c130c;--brand-l:#5da876;--cream:#1c261a;--track:#243021;
+ --bar-top:#5fae74;--bar-bot:#2c6a45;--sh:0 6px 20px rgba(0,0,0,.4);--sh-lg:0 14px 40px rgba(0,0,0,.55);--sh-sm:0 1px 2px rgba(0,0,0,.4)}
+*{box-sizing:border-box}html,body{margin:0}
+body{font-family:var(--sans);background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;line-height:1.45}
+.app{display:grid;grid-template-columns:248px 1fr;min-height:100vh}
+/* sidebar */
+aside{background:linear-gradient(180deg,var(--brand-d),var(--brand));color:#e8efdc;display:flex;flex-direction:column;position:sticky;top:0;height:100vh}
+.brand{padding:22px 20px 14px;display:flex;gap:11px;align-items:center}
+.brand .logo{width:40px;height:40px;border-radius:12px;background:radial-gradient(circle at 30% 30%,#7fae73,#2f6a44);display:grid;place-items:center;font-size:20px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.15)}
+.brand .bt{font-weight:800;font-size:16px;letter-spacing:.2px}.brand .bs{font-size:11px;color:var(--sage)}
+.navg{padding:6px 12px;flex:1;overflow:auto}
+.navi{display:flex;align-items:center;gap:12px;width:100%;background:none;border:0;color:#cdd9bc;padding:11px 13px;border-radius:11px;font-size:14.5px;font-weight:600;cursor:pointer;margin:3px 0;transition:.15s}
+.navi:hover{background:rgba(255,255,255,.07);color:#fff}
+.navi.on{background:rgba(255,255,255,.13);color:#fff;box-shadow:inset 3px 0 0 var(--gold)}
+.navi svg{width:19px;height:19px;flex:none;opacity:.92}
+.sidefoot{padding:14px;border-top:1px solid rgba(255,255,255,.1);font-size:11.5px;color:var(--sage);display:flex;align-items:center;justify-content:space-between;gap:8px}
+.tgl{background:rgba(255,255,255,.1);border:0;color:#e8efdc;border-radius:20px;padding:6px 12px;cursor:pointer;font-size:12px}
+/* main */
+main{min-width:0;display:flex;flex-direction:column}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 28px;border-bottom:1px solid var(--line);background:var(--panel);position:sticky;top:0;z-index:8;flex-wrap:wrap}
+.topbar h1{font-family:var(--serif);font-size:21px;margin:0;font-weight:700;color:var(--ink)}
+.topbar .sub{font-size:12.5px;color:var(--muted);margin-top:2px}
+.chip{font-size:11.5px;background:var(--panel2);border:1px solid var(--line);color:var(--muted);padding:5px 11px;border-radius:20px}
+.wrap{padding:24px 28px;max-width:1240px;width:100%}
+.page{display:none}.page.on{display:block;animation:fade .28s ease}@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1}}
+h2.sec{font-family:var(--serif);font-size:17px;color:var(--ink);margin:26px 0 10px;font-weight:700}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh-sm);padding:18px}
+.grid{display:grid;gap:16px}.kpis{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.two{grid-template-columns:1.2fr 1fr}@media(max-width:900px){.two{grid-template-columns:1fr}}
+.kpi{position:relative;overflow:hidden;transition:.18s}.kpi:hover{transform:translateY(-3px);box-shadow:var(--sh)}
+.kpi::before{content:"";position:absolute;inset:0 0 auto;height:3px;background:linear-gradient(90deg,var(--brand),var(--gold))}
+.kpi .ic{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;background:linear-gradient(135deg,var(--cream),var(--panel2));color:var(--brand);font-size:18px;margin-bottom:12px;border:1px solid var(--line)}
+.kpi .n{font-size:27px;font-weight:800;color:var(--ink);line-height:1.05;font-feature-settings:"tnum"}
+.kpi .l{font-size:11.5px;color:var(--muted);margin-top:5px;text-transform:uppercase;letter-spacing:.5px;font-weight:600}
+.kpi .s{font-size:12px;color:var(--brand-l);margin-top:8px;font-weight:600}
+/* charts */
+.cardh{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:6px}
+.cardh .t{font-family:var(--serif);font-size:15.5px;font-weight:700}.cardh .d{font-size:11.5px;color:var(--muted)}
+.chartwrap{overflow-x:auto}
+.hbars{display:flex;flex-direction:column;gap:9px;margin-top:6px}
+.hb{display:grid;grid-template-columns:168px 1fr 58px;align-items:center;gap:12px}
+.hb-l{display:flex;align-items:center;gap:8px;min-width:0}
+.ava{width:24px;height:24px;border-radius:50%;flex:none;display:grid;place-items:center;font-size:10px;font-weight:800;color:#fff;background:linear-gradient(135deg,var(--olive),var(--brand))}
+.hb-name{font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--ink)}
+.hb-track{height:18px;background:var(--track);border-radius:9px;overflow:hidden}
+.hb-fill{height:100%;border-radius:9px;background:linear-gradient(90deg,var(--gold),var(--sage))}
+.hb-v{text-align:right;font-weight:800;font-size:12.5px;color:var(--brand)}
+/* alerts feed */
+.feed{display:flex;flex-direction:column;gap:9px}
+.fi{display:flex;gap:12px;align-items:flex-start;background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--line);border-radius:12px;padding:12px 14px;box-shadow:var(--sh-sm)}
+.fi .fic{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;font-size:15px;flex:none}
+.fi.g{border-left-color:var(--ok)}.fi.g .fic{background:#e6f1e6;color:var(--ok)}
+.fi.r{border-left-color:var(--red)}.fi.r .fic{background:#f8e6e1;color:var(--red)}
+.fi.y{border-left-color:var(--gold)}.fi.y .fic{background:#f6efd6;color:#9a7d1e}
+.fi .ft{font-size:13.5px}.fi .ft b{color:var(--ink)}
+/* table */
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.search{display:flex;align-items:center;gap:8px;background:var(--panel);border:1px solid var(--line);border-radius:24px;padding:8px 14px;box-shadow:var(--sh-sm)}
+.search input{border:0;outline:0;background:none;font-size:14px;color:var(--ink);width:200px}
+.tblcard{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh-sm);overflow:hidden}
+.tblscroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;font-size:13px;min-width:520px}
+thead th{background:var(--brand);color:#fff;padding:11px 12px;text-align:left;cursor:pointer;user-select:none;font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.4px;white-space:nowrap}
+thead th:hover{background:var(--brand-l)}
+tbody td{padding:10px 12px;border-bottom:1px solid var(--line)}
+tbody tr{transition:.1s}tbody tr:hover td{background:var(--panel2)}
+tbody tr:last-child td{border-bottom:0}
+.lotno{font-weight:800;color:var(--ink)}.val{font-weight:800;color:var(--brand)}
+.diff-o{color:var(--red);font-weight:700;font-size:11.5px}.diff-u{color:var(--ok);font-weight:700;font-size:11.5px}
+.badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap}
+.b-prem{background:#f1e6c2;color:#856416}.b-fair{background:#e4ecd4;color:#4f5d2d}.b-cheap{background:#f6ddd5;color:#8c2f1d}
+.muted{color:var(--muted)}
+/* forms */
+.flex{display:flex;gap:16px;flex-wrap:wrap}.flex>*{flex:1;min-width:300px}
+label{display:block;font-size:12px;color:var(--muted);margin:12px 0 5px;font-weight:700;text-transform:uppercase;letter-spacing:.3px}
+input.f,select.f,textarea.f{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font-size:14px;font-family:inherit;background:var(--panel);color:var(--ink)}
+input.f:focus,select.f:focus,textarea.f:focus{outline:0;border-color:var(--sage);box-shadow:0 0 0 3px rgba(154,171,107,.25)}
+.row{display:flex;gap:12px;flex-wrap:wrap}.row>div{flex:1;min-width:120px}
+.btn{border:0;border-radius:11px;padding:11px 20px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:.15s}
+.btn.p{background:var(--brand);color:#fff}.btn.p:hover{background:var(--brand-l);box-shadow:var(--sh)}
+.btn.g{background:var(--panel);color:var(--brand);border:1px solid var(--line)}.btn.g:hover{border-color:var(--sage)}
+.big{font-size:40px;font-weight:800;color:var(--brand);font-feature-settings:"tnum"}
+.hint{color:var(--muted);font-size:13px}
+.tag{display:inline-block;font-size:11px;background:var(--panel2);color:var(--brand);border:1px solid var(--line);border-radius:7px;padding:2px 8px}
+footer{text-align:center;color:var(--muted);font-size:11.5px;padding:24px}
+/* mobile */
+@media(max-width:820px){
+ .app{grid-template-columns:1fr}
+ aside{position:fixed;bottom:0;left:0;right:0;top:auto;height:auto;flex-direction:row;z-index:20;box-shadow:0 -4px 20px rgba(0,0,0,.18)}
+ .brand,.sidefoot{display:none}.navg{display:flex;padding:6px;flex:1}
+ .navi{flex-direction:column;gap:3px;font-size:10.5px;padding:8px 4px;margin:0}
+ .navi.on{box-shadow:inset 0 3px 0 var(--gold)}
+ main{padding-bottom:74px}.wrap{padding:16px}.topbar{padding:14px 16px}
+}
+@media(max-width:680px){
+ .opt{display:none}table{min-width:0}
+ .hb{grid-template-columns:92px 1fr 48px;gap:8px}.hb-name{font-size:11px}.ava{width:20px;height:20px;font-size:9px}
+ .kpis{grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}.kpi .n{font-size:22px}
+ .topbar h1{font-size:18px}.wrap{padding:13px}.flex>*{min-width:0}
+}
+</style></head><body>
+<div class="app">
+<aside>
+ <div class="brand"><div class="logo">üçÉ</div><div><div class="bt">Bhatkawa Tea</div><div class="bs">Agent ¬∑ Elevate</div></div></div>
+ <div class="navg">
+  <button class="navi on" id="t-dash" onclick="go('dash')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>Dashboard</button>
+  <button class="navi" id="t-lots" onclick="go('lots')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 20A7 7 0 0 1 18 4h3v3a7 7 0 0 1-7 7h-3z"/><path d="M4 20c3-4 7-6 11-7"/></svg>Lots</button>
+  <button class="navi" id="t-buyers" onclick="go('buyers')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19a5.5 5.5 0 0 1 11 0"/><path d="M16 6a3 3 0 0 1 0 6M21 19a5.5 5.5 0 0 0-4-5.3"/></svg>Buyers</button>
+  <button class="navi" id="t-tools" onclick="go('tools')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 6.5a3.5 3.5 0 0 1-4.6 4.6L5 16l3 3 4.9-4.9a3.5 3.5 0 0 1 4.6-4.6l-2 2-2-2 2-2z"/></svg>Tools</button>
+ </div>
+ <div class="sidefoot"><span>Runs offline üîí</span><button class="tgl" onclick="toggleTheme()" id="tglb">üåô Dark</button></div>
+</aside>
+<main>
+ <div class="topbar"><div><h1 id="pgt">Dashboard</h1><div class="sub" id="pgs"></div></div>
+  <div class="chip" id="meta"></div></div>
+ <div class="wrap">
+  <div id="dash" class="page on"></div><div id="lots" class="page"></div>
+  <div id="buyers" class="page"></div><div id="tools" class="page"></div>
+ </div>
+ <footer>Bhatkawa Tea Industries Ltd ¬∑ est. 1911 ¬∑ built by Elevate</footer>
+</main>
+</div>
+<script>
+const DATA = {"lots": [{"garden": "Bhatkawa", "lot": "485", "grade": "BP", "jt": null, "parcon": null, "gardenval": 360, "contemp": null, "gardenq": 21.25, "actual": null}, {"garden": "Bhatkawa", "lot": "663", "grade": "BP", "jt": 360, "parcon": null, "gardenval": null, "contemp": null, "gardenq": null, "actual": null}, {"garden": "Bhatkawa", "lot": "664", "grade": "OF", "jt": 360, "parcon": null, "gardenval": null, "contemp": null, "gardenq": null, "actual": 330.0}, {"garden": "Bhatkawa", "lot": "665", "grade": "BP", "jt": 360, "parcon": null, "gardenval": null, "contemp": null, "gardenq": null, "actual": 325.0}, {"garden": "Bhatkawa", "lot": "666", "grade": "BOPSM", "jt": 340, "parcon": null, "gardenval": null, "contemp": null, "gardenq": null, "actual": null}, {"garden": "Bhatkawa", "lot": "667", "grade": "BP", "jt": 360, "parcon": null, "gardenval": null, "contemp": null, "gardenq": null, "actual": 325.0}, {"garden": "Bhatkawa", "lot": "668", "grade": "OF", "jt": 360, "parcon": null, "gardenval": null, "contemp": null, "gardenq": null, "actual": null}, {"garden": "Bhatkawa", "lot": "669", "grade": "BP", "jt": 360, "parcon": null, "gardenval": null, "contemp": null, "gardenq": null, "actual": null}, {"garden": "Bhatkawa", "lot": "670", "grade": "BP", "jt": 360, "parcon": null, "gardenval": null, "contemp": null, "gardenq": null, "actual": null}, {"garden": "Bhatkawa", "lot": "671", "grade": "OF", "jt": 360, "parcon": null, "gardenval": null, "contemp": null, "gardenq": null, "actual": 325.0}, {"garden": "Bhatkawa", "lot": "672", "grade": "BP", "jt": 360, "parcon": null, "gardenval": null, "contemp": null, "gardenq": null, "actual": null}, {"garden": "Bhatkawa", "lot": "673", "grade": "BOPSM", "jt": 340, "parcon": null, "gardenval": null, "contemp": null, "gardenq": null, "actual": null}, {"garden": "Bhatkawa", "lot": "674", "grade": "BP", "jt": 360, "parcon": null, "gardenval": null, "contemp": null, "gardenq": null, "actual": null}, {"garden": "Bhatkawa", "lot": "675", "grade": "OF", "jt": 360, "parcon": null, "gardenval": null, "contemp": null, "gardenq": null, "actual": 325.0}, {"garden": "Bhatkawa", "lot": "676", "grade": "BP", "jt": 360, "parcon": null, "gardenval": null, "contemp": null, "gardenq": null, "actual": 325.0}, {"garden": "Bhatkawa", "lot": "677", "grade": "BOPSM", "jt": 340, "parcon": null, "gardenval": null, "contemp": null, "gardenq": null, "actual": null}, {"garden": "Bhatkawa", "lot": "678", "grade": "BP", "jt": 360, "parcon": null, "gardenval": null, "contemp": null, "gardenq": null, "actual": null}, {"garden": "Bhatkawa", "lot": "679", "grade": "BP", "jt": 360, "parcon": null, "gardenval": null, "contemp": null, "gardenq": null, "actual": null}, {"garden": "Bhatkawa", "lot": "681", "grade": "", "jt": null, "parcon": null, "gardenval": null, "contemp": null, "gardenq": null, "actual": 325.0}, {"garden": "Bhatkawa", "lot": "699", "grade": "", "jt": null, "parcon": null, "gardenval": null, "contemp": null, "gardenq": null, "actual": 330.0}, {"garden": "Bhatkawa", "lot": "721", "grade": "", "jt": null, "parcon": null, "gardenval": null, "contemp": null, "gardenq": null, "actual": 325.0}, {"garden": "Bhatkawa", "lot": "722", "grade": "", "jt": null, "parcon": null, "gardenval": null, "contemp": null, "gardenq": null, "actual": 290.0}, {"garden": "Bhatkawa", "lot": "723", "grade": "", "jt": null, "parcon": null, "gardenval": null, "contemp": null, "gardenq": null, "actual": 325.0}, {"garden": "Bhatkawa", "lot": "725", "grade": "", "jt": null, "parcon": null, "gardenval": null, "contemp": null, "gardenq": null, "actual": 290.0}, {"garden": "Bhatkawa", "lot": "727", "grade": "BP", "jt": null, "parcon": null, "gardenval": null, "contemp": 17.5, "gardenq": null, "actual": null}, {"garden": "Bhatkawa", "lot": "728", "grade": "OF", "jt": null, "parcon": null, "gardenval": null, "contemp": 17.25, "gardenq": null, "actual": null}, {"garden": "Bhatkawa", "lot": "729", "grade": "BP", "jt": null, "parcon": null, "gardenval": null, "contemp": 17.5, "gardenq": null, "actual": null}, {"garden": "Bhatkawa", "lot": "730", "grade": "", "jt": null, "parcon": null, "gardenval": null, "contemp": null, "gardenq": null, "actual": 295.0}, {"garden": "Bhatkawa", "lot": "731", "grade": "BP", "jt": null, "parcon": null, "gardenval": null, "contemp": 17.25, "gardenq": null, "actual": null}, {"garden": "Bhatkawa", "lot": "732", "grade": "BP", "jt": null, "parcon": null, "gardenval": 360, "contemp": 17.0, "gardenq": 21.0, "actual": null}, {"garden": "Bhatkawa", "lot": "733", "grade": "BP", "jt": null, "parcon": null, "gardenval": null, "contemp": 17.0, "gardenq": null, "actual": null}, {"garden": "Bhatkawa", "lot": "734", "grade": "BOPSM", "jt": null, "parcon": null, "gardenval": null, "contemp": 17.5, "gardenq": null, "actual": null}, {"garden": "Bhatkawa", "lot": "735", "grade": "BP", "jt": null, "parcon": null, "gardenval": null, "contemp": 17.25, "gardenq": null, "actual": null}, {"garden": "Bhatkawa", "lot": "736", "grade": "BP", "jt": null, "parcon": null, "gardenval": null, "contemp": 17.5, "gardenq": null, "actual": null}, {"garden": "Bhatkawa", "lot": "740", "grade": "BP", "jt": null, "parcon": null, "gardenval": null, "contemp": 17.5, "gardenq": null, "actual": null}, {"garden": "Bhatkawa", "lot": "741", "grade": "BOPSM", "jt": null, "parcon": null, "gardenval": null, "contemp": 17.5, "gardenq": null, "actual": null}, {"garden": "Bhatkawa", "lot": "744", "grade": "BP", "jt": null, "parcon": null, "gardenval": null, "contemp": 17.5, "gardenq": null, "actual": null}, {"garden": "Bhatkawa", "lot": "746", "grade": "BP", "jt": null, "parcon": null, "gardenval": null, "contemp": 17.25, "gardenq": null, "actual": null}, {"garden": "Bhatkawa", "lot": "748", "grade": "BP", "jt": null, "parcon": null, "gardenval": null, "contemp": 17.25, "gardenq": null, "actual": null}, {"garden": "Bhatkawa", "lot": "751", "grade": "BP", "jt": null, "parcon": null, "gardenval": null, "contemp": 17.0, "gardenq": null, "actual": null}, {"garden": "Bhatkawa", "lot": "752", "grade": "OF", "jt": null, "parcon": null, "gardenval": null, "contemp": 17.0, "gardenq": null, "actual": null}, {"garden": "Bhatkawa", "lot": "755", "grade": "BP", "jt": null, "parcon": null, "gardenval": null, "contemp": 17.25, "gardenq": null, "actual": null}, {"garden": "Bhatkawa", "lot": "756", "grade": "BOPSM", "jt": null, "parcon": null, "gardenval": null, "contemp": 17.5, "gardenq": null, "actual": null}, {"garden": "Bhatkawa", "lot": "759", "grade": "BP", "jt": null, "parcon": null, "gardenval": null, "contemp": 17.0, "gardenq": null, "actual": null}, {"garden": "Bhatkawa", "lot": "760", "grade": "OF", "jt": null, "parcon": null, "gardenval": null, "contemp": 17.0, "gardenq": null, "actual": null}, {"garden": "Bhatkawa", "lot": "761", "grade": "BP", "jt": null, "parcon": null, "gardenval": null, "contemp": 17.25, "gardenq": null, "actual": null}, {"garden": "Bhatkawa", "lot": "767", "grade": "BP", "jt": null, "parcon": null, "gardenval": 360, "contemp": null, "gardenq": 21.25, "actual": null}, {"garden": "Bhatkawa", "lot": "781", "grade": "BP", "jt": null, "parcon": null, "gardenval": 360, "contemp": null, "gardenq": 21.25, "actual": null}, {"garden": "Bhatkawa", "lot": "783", "grade": "BP", "jt": null, "parcon": null, "gardenval": 360, "contemp": null, "gardenq": 20.75, "actual": null}, {"garden": "Bhatkawa", "lot": "784", "grade": "OF", "jt": null, "parcon": null, "gardenval": 360, "contemp": null, "gardenq": 20.75, "actual": null}, {"garden": "Bhatkawa", "lot": "786", "grade": "BOPSM", "jt": null, "parcon": null, "gardenval": 360, "contemp": null, "gardenq": 20.75, "actual": null}, {"garden": "Bhatkawa", "lot": "788", "grade": "BP", "jt": null, "parcon": null, "gardenval": 360, "contemp": null, "gardenq": 20.75, "actual": null}, {"garden": "Pahargoomiah", "lot": "485", "grade": "BP", "jt": null, "parcon": 310.0, "gardenval": null, "contemp": null, "gardenq": null, "actual": null}, {"garden": "Pahargoomiah", "lot": "486", "grade": "OF", "jt": null, "parcon": 310.0, "gardenval": null, "contemp": null, "gardenq": null, "actual": null}, {"garden": "Pahargoomiah", "lot": "487", "grade": "BOPSM", "jt": null, "parcon": 280.0, "gardenval": null, "contemp": null, "gardenq": null, "actual": null}, {"garden": "Pahargoomiah", "lot": "488", "grade": "D", "jt": null, "parcon": 260.0, "gardenval": null, "contemp": null, "gardenq": null, "actual": null}, {"garden": "Pahargoomiah", "lot": "489", "grade": "BP", "jt": null, "parcon": 310.0, "gardenval": null, "contemp": null, "gardenq": null, "actual": null}, {"garden": "Pahargoomiah", "lot": "490", "grade": "D", "jt": null, "parcon": 260.0, "gardenval": null, "contemp": null, "gardenq": null, "actual": null}, {"garden": "Pahargoomiah", "lot": "491", "grade": "PD", "jt": null, "parcon": 280.0, "gardenval": null, "contemp": null, "gardenq": null, "actual": null}, {"garden": "Pahargoomiah", "lot": "492", "grade": "BP", "jt": null, "parcon": 310.0, "gardenval": null, "contemp": null, "gardenq": null, "actual": null}, {"garden": "Pahargoomiah", "lot": "493", "grade": "OF", "jt": null, "parcon": 310.0, "gardenval": null, "contemp": null, "gardenq": null, "actual": null}, {"garden": "Pahargoomiah", "lot": "494", "grade": "BP1", "jt": null, "parcon": 240.0, "gardenval": null, "contemp": null, "gardenq": null, "actual": null}, {"garden": "Pahargoomiah", "lot": "495", "grade": "OF1", "jt": null, "parcon": 240.0, "gardenval": null, "contemp": null, "gardenq": null, "actual": null}, {"garden": "Pahargoomiah", "lot": "496", "grade": "PF1", "jt": null, "parcon": 240.0, "gardenval": null, "contemp": null, "gardenq": null, "actual": null}, {"garden": "Pahargoomiah", "lot": "497", "grade": "OF1", "jt": null, "parcon": 240.0, "gardenval": null, "contemp": null, "gardenq": null, "actual": null}], "buyers": [{"name": "TATA CONSUMER PRODUCTS LIMITED", "lots": 40, "pkgs": 1196, "avg": 140, "min": 118, "max": 230, "fav": "BP"}, {"name": "BANSAL AGRO & TEA MANUFACTURE", "lots": 39, "pkgs": 892, "avg": 281, "min": 206, "max": 330, "fav": "BP"}, {"name": "TEA SAMRAT", "lots": 29, "pkgs": 676, "avg": 209, "min": 152, "max": 270, "fav": "BP"}, {"name": "HINDUSTAN UNILEVER LTD", "lots": 23, "pkgs": 631, "avg": 140, "min": 120, "max": 160, "fav": "BP"}, {"name": "MADHUVAN TEA ESTATE", "lots": 28, "pkgs": 562, "avg": 158, "min": 120, "max": 282, "fav": "BP"}, {"name": "DALMIA ENTERPRISES", "lots": 20, "pkgs": 428, "avg": 308, "min": 250, "max": 350, "fav": "OF"}, {"name": "ARUN OVERSEAS", "lots": 15, "pkgs": 396, "avg": 156, "min": 128, "max": 251, "fav": "BP"}, {"name": "GOODRICK GROUP LTD.", "lots": 15, "pkgs": 395, "avg": 150, "min": 133, "max": 170, "fav": "OF"}, {"name": "TEWARI TEA CORPORATION", "lots": 17, "pkgs": 388, "avg": 269, "min": 182, "max": 313, "fav": "BOPSM"}, {"name": "DARJEELING TEA SUPPLY CO.", "lots": 11, "pkgs": 387, "avg": 121, "min": 103, "max": 143, "fav": "BP"}, {"name": "M.B. TEA & ALLIED PRODUCTS (P)", "lots": 15, "pkgs": 357, "avg": 324, "min": 296, "max": 338, "fav": "BP"}, {"name": "MILAN AGRO COMPANY", "lots": 14, "pkgs": 353, "avg": 163, "min": 110, "max": 239, "fav": "OF"}, {"name": "PAHARI MATA TEA CORPORATION", "lots": 13, "pkgs": 319, "avg": 329, "min": 301, "max": 343, "fav": "BP"}, {"name": "AVYAN TEA COMPANY", "lots": 11, "pkgs": 262, "avg": 324, "min": 304, "max": 350, "fav": "OF"}, {"name": "JAGDISH & BROTHERS", "lots": 12, "pkgs": 251, "avg": 210, "min": 131, "max": 332, "fav": "OF"}, {"name": "PIONEER ENTERPRISE", "lots": 11, "pkgs": 246, "avg": 140, "min": 117, "max": 240, "fav": "BOPSM"}, {"name": "ANAND KUMAR BANSAL & SONS", "lots": 10, "pkgs": 231, "avg": 189, "min": 138, "max": 304, "fav": "BOPSM"}, {"name": "PATAKA INDTS. (P) LTD.", "lots": 13, "pkgs": 229, "avg": 223, "min": 187, "max": 250, "fav": "BP1"}, {"name": "SHYAMSHREE ESSENTIALS PVT. LTD", "lots": 9, "pkgs": 202, "avg": 141, "min": 127, "max": 167, "fav": "BP"}, {"name": "CENTRAL AGRI TRADES (P) LTD", "lots": 10, "pkgs": 198, "avg": 176, "min": 159, "max": 207, "fav": "OF"}, {"name": "D DAYALBHAI & CO.", "lots": 7, "pkgs": 173, "avg": 295, "min": 135, "max": 341, "fav": "BP"}, {"name": "K. TEA CORPORATION", "lots": 6, "pkgs": 165, "avg": 337, "min": 270, "max": 351, "fav": "BP"}, {"name": "JAIN TEA CO.", "lots": 6, "pkgs": 156, "avg": 177, "min": 122, "max": 242, "fav": "BP"}, {"name": "SUBHAS TRADING COMPANY", "lots": 6, "pkgs": 152, "avg": 206, "min": 145, "max": 356, "fav": "BP"}, {"name": "MANIBHADRA TEA COMPANY", "lots": 6, "pkgs": 149, "avg": 113, "min": 108, "max": 117, "fav": "BOPSM"}], "buyersByGrade": {"BOPSM": [{"name": "A K PATEL & CO.", "avg": 298, "lots": 2, "pkgs": 50, "max": 301}, {"name": "UNIVERSAL TEA & MARKETING", "avg": 267, "lots": 3, "pkgs": 59, "max": 297}, {"name": "BANSAL AGRO & TEA MANUFACTURE", "avg": 262, "lots": 8, "pkgs": 176, "max": 292}, {"name": "TEWARI TEA CORPORATION", "avg": 258, "lots": 9, "pkgs": 188, "max": 297}, {"name": "PATAKA INDTS. (P) LTD.", "avg": 248, "lots": 2, "pkgs": 37, "max": 248}, {"name": "P.C. JHAWAR & CO.", "avg": 235, "lots": 3, "pkgs": 41, "max": 242}, {"name": "MSP CORPORATION", "avg": 232, "lots": 4, "pkgs": 60, "max": 250}, {"name": "GIRDHARILAL MOHANLAL", "avg": 221, "lots": 2, "pkgs": 40, "max": 276}, {"name": "ANAND KUMAR BANSAL & SONS", "avg": 206, "lots": 5, "pkgs": 125, "max": 304}, {"name": "RAJKUMAR JAIN & CO.", "avg": 200, "lots": 2, "pkgs": 35, "max": 211}], "BP": [{"name": "SHRI BALAJI BROKER HOUSE", "avg": 337, "lots": 3, "pkgs": 56, "max": 339}, {"name": "BOMBAY TEA TRADERS", "avg": 336, "lots": 2, "pkgs": 40, "max": 338}, {"name": "PAHARI MATA TEA CORPORATION", "avg": 331, "lots": 11, "pkgs": 269, "max": 343}, {"name": "K. TEA CORPORATION", "avg": 330, "lots": 4, "pkgs": 105, "max": 351}, {"name": "M.B. TEA & ALLIED PRODUCTS (P)", "avg": 329, "lots": 10, "pkgs": 236, "max": 338}, {"name": "EASTERN TEA CORPORATION", "avg": 328, "lots": 2, "pkgs": 55, "max": 331}, {"name": "D DAYALBHAI & CO.", "avg": 322, "lots": 6, "pkgs": 142, "max": 341}, {"name": "AVYAN TEA COMPANY", "avg": 321, "lots": 4, "pkgs": 100, "max": 336}, {"name": "M.M. TRADERS", "avg": 314, "lots": 2, "pkgs": 40, "max": 334}, {"name": "DALMIA ENTERPRISES", "avg": 305, "lots": 6, "pkgs": 146, "max": 333}], "OF": [{"name": "K. TEA CORPORATION", "avg": 351, "lots": 2, "pkgs": 60, "max": 351}, {"name": "AVYAN TEA COMPANY", "avg": 329, "lots": 5, "pkgs": 132, "max": 350}, {"name": "M.B. TEA & ALLIED PRODUCTS (P)", "avg": 325, "lots": 2, "pkgs": 52, "max": 330}, {"name": "DALMIA ENTERPRISES", "avg": 317, "lots": 8, "pkgs": 185, "max": 350}, {"name": "H.T. TEA & ALLIED PRODUCTS PVT LTD", "avg": 304, "lots": 2, "pkgs": 40, "max": 305}, {"name": "MAA DURGA ASSOCIATES", "avg": 292, "lots": 2, "pkgs": 36, "max": 343}, {"name": "JAGDISH & BROTHERS", "avg": 251, "lots": 6, "pkgs": 114, "max": 332}, {"name": "S.B. ENTERPRISES", "avg": 250, "lots": 3, "pkgs": 75, "max": 333}, {"name": "SIDDHANT TEA COMPANY", "avg": 242, "lots": 5, "pkgs": 92, "max": 270}, {"name": "SURENDRA KUMAR JAIN", "avg": 222, "lots": 2, "pkgs": 40, "max": 270}], "BP1": [{"name": "M.B. TEA & ALLIED PRODUCTS (P)", "avg": 308, "lots": 3, "pkgs": 69, "max": 316}, {"name": "DALMIA ENTERPRISES", "avg": 298, "lots": 4, "pkgs": 72, "max": 319}, {"name": "MILAN AGRO COMPANY", "avg": 229, "lots": 2, "pkgs": 40, "max": 239}, {"name": "PRATIBHA TRADING CO.", "avg": 226, "lots": 2, "pkgs": 27, "max": 230}, {"name": "PATAKA INDTS. (P) LTD.", "avg": 207, "lots": 6, "pkgs": 97, "max": 243}, {"name": "SRI PURBANCHAL TEA COMPANY", "avg": 201, "lots": 2, "pkgs": 40, "max": 215}, {"name": "MADHUVAN TEA ESTATE", "avg": 173, "lots": 5, "pkgs": 63, "max": 221}, {"name": "DALPAT TEA PRIVATE LIMITED", "avg": 167, "lots": 3, "pkgs": 47, "max": 216}, {"name": "SAKSHI CHAI UDYOG", "avg": 113, "lots": 2, "pkgs": 35, "max": 114}, {"name": "MANIBHADRA TEA COMPANY", "avg": 108, "lots": 2, "pkgs": 60, "max": 109}], "BOP": [{"name": "BANSAL AGRO & TEA MANUFACTURE", "avg": 276, "lots": 2, "pkgs": 19, "max": 280}, {"name": "TEA LEAF INDIA", "avg": 224, "lots": 2, "pkgs": 40, "max": 291}, {"name": "JAGDISH & BROTHERS", "avg": 176, "lots": 2, "pkgs": 45, "max": 221}, {"name": "BPS TEA COMPANY", "avg": 172, "lots": 2, "pkgs": 18, "max": 186}, {"name": "TATA CONSUMER PRODUCTS LIMITED", "avg": 127, "lots": 6, "pkgs": 195, "max": 146}, {"name": "PIONEER ENTERPRISE", "avg": 121, "lots": 3, "pkgs": 71, "max": 126}, {"name": "MADHUVAN TEA ESTATE", "avg": 120, "lots": 2, "pkgs": 39, "max": 121}, {"name": "DARJEELING TEA SUPPLY CO.", "avg": 109, "lots": 2, "pkgs": 71, "max": 115}], "OF1": [{"name": "ASHIS TEA TRADERS", "avg": 222, "lots": 2, "pkgs": 26, "max": 236}, {"name": "SIDDHANT TEA COMPANY", "avg": 204, "lots": 2, "pkgs": 35, "max": 216}, {"name": "MADHUVAN TEA ESTATE", "avg": 176, "lots": 4, "pkgs": 58, "max": 202}], "PF": [], "BOPSM1": []}, "benchmark": {"BOPSM": 195, "BP": 222, "OF": 211, "BP1": 206, "BOP": 170, "OF1": 201, "PF": 250, "BOPSM1": 122}, "realized": {"BP": 325, "OF": 327, "BOPSM": 292, "PF": 290}, "meta": {"auction": 635, "sold": 13, "contemporary": 21, "parcon": 13, "built": "24 Jun 2026"}};
+const KEY="bhatkawa_user_lots_v2";
+const TASTERS=["J Thomas","Parcon","Garden"];
+const TITLES={dash:["Dashboard","Your tea at a glance"],lots:["Lots","Every lot, valued & ranked"],
+ buyers:["Buyers","Who to sell to, and for how much"],add:["Add data","Feed the agent new reports"],tools:["Tools","Calculator, export & backup"]};
+const esc=s=>(""+s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const nums=a=>a.filter(x=>typeof x==="number"&&!isNaN(x));
+const mean=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:null;
+const rs=v=>"‚Çπ"+v;
+const initials=n=>n.replace(/[^A-Za-z ]/g,"").split(/\s+/).filter(Boolean).slice(0,2).map(w=>w[0]).join("").toUpperCase()||"¬∑";
+document.getElementById("meta").textContent=`Updated ${DATA.meta.built} ¬∑ ${DATA.meta.auction} auction lots`;
+
+function userLots(){try{return JSON.parse(localStorage.getItem(KEY))||[]}catch(e){return[]}}
+function saveUser(u){localStorage.setItem(KEY,JSON.stringify(u))}
+function merged(){const m={};DATA.lots.forEach(l=>m[l.garden+"|"+l.lot]={...l});
+ userLots().forEach(u=>{const k=u.garden+"|"+u.lot;m[k]={...(m[k]||{}),...u}});return Object.values(m)}
+const predsOf=l=>({"J Thomas":l.jt,"Parcon":l.parcon,"Garden":l.gardenval});
+function weights(L){const err={};
+ L.forEach(l=>{if(l.actual!=null){const p=predsOf(l);TASTERS.forEach(t=>{if(typeof p[t]==="number")(err[t]=err[t]||[]).push(Math.abs(p[t]-l.actual))})}});
+ const mae={};Object.keys(err).forEach(t=>mae[t]=mean(err[t]));
+ const w={};const known=Object.values(mae);const avg=known.length?mean(known.map(m=>1/(m+5))):1;
+ TASTERS.forEach(t=>w[t]=t in mae?1/(mae[t]+5):avg);return{w,mae}}
+function smartVal(l,w){const p=predsOf(l);let s=0,ws=0;TASTERS.forEach(t=>{if(typeof p[t]==="number"){s+=p[t]*w[t];ws+=w[t]}});return ws?Math.round(s/ws):null}
+const mkFor=g=>(DATA.realized&&DATA.realized[g]!=null)?DATA.realized[g]:DATA.benchmark[g];
+function reco(l,w){const v=smartVal(l,w),mk=mkFor(l.grade);if(v==null)return{t:"‚Äî",c:""};
+ if(!mk)return{t:rs(v),c:"b-fair"};const d=(v-mk)/mk*100;
+ if(d>8)return{t:"Premium ¬∑ hold",c:"b-prem"};if(d<-8)return{t:"Below market ¬∑ push",c:"b-cheap"};return{t:"At market ¬∑ sell",c:"b-fair"}}
+const bestBuyers=g=>(DATA.buyersByGrade[g]||[]).slice(0,3).map(b=>b.name);
+
+/* charts */
+function vbars(items,{h=180,fmt=v=>v,marker=null,markerLabel=""}={}){
+ const n=items.length,slot=Math.max(54,Math.floor(560/Math.max(n,1))),W=n*slot,H=h+42;
+ const mx=Math.max(...items.map(i=>i.value),marker||0)*1.14||1;const sc=v=>h-v/mx*h;
+ let s=`<svg viewBox="0 0 ${W} ${H}" width="100%" preserveAspectRatio="xMinYMin meet" style="min-width:${Math.min(W,560)}px;display:block">
+  <defs><linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--bar-top)"/><stop offset="1" stop-color="var(--bar-bot)"/></linearGradient></defs>`;
+ for(let k=1;k<=3;k++){const y=h-h*k/4;s+=`<line x1="0" y1="${y}" x2="${W}" y2="${y}" stroke="var(--line)" stroke-dasharray="2 5"/>`}
+ if(marker){const y=sc(marker);s+=`<line x1="0" y1="${y}" x2="${W}" y2="${y}" stroke="var(--gold)" stroke-width="1.5" stroke-dasharray="6 4"/><text x="6" y="${y-5}" font-size="10" fill="var(--gold)" font-weight="700">${esc(markerLabel)}</text>`}
+ items.forEach((it,i)=>{const bw=slot*0.52,x=i*slot+(slot-bw)/2,y=sc(it.value),bh=h-y;
+  s+=`<rect x="${x}" y="${y}" width="${bw}" height="${bh}" rx="6" fill="url(#bg)"><title>${esc(it.label)}: ${fmt(it.value)}</title></rect>
+   <text x="${i*slot+slot/2}" y="${y-6}" text-anchor="middle" font-size="11" font-weight="800" fill="var(--ink)">${fmt(it.value)}</text>
+   <text x="${i*slot+slot/2}" y="${h+17}" text-anchor="middle" font-size="10.5" fill="var(--muted)">${esc(it.label)}</text>`});
+ return s+`</svg>`}
+function hbars(items,{fmt=v=>v}={}){const mx=Math.max(...items.map(i=>i.value),1);
+ return `<div class="hbars">`+items.map(i=>`<div class="hb"><div class="hb-l"><span class="ava">${initials(i.label)}</span><span class="hb-name" title="${esc(i.label)}">${esc(i.label)}</span></div><div class="hb-track"><div class="hb-fill" style="width:${Math.max(4,i.value/mx*100)}%"></div></div><div class="hb-v">${fmt(i.value)}</div></div>`).join("")+`</div>`}
+
+function go(id){["dash","lots","buyers","tools"].forEach(t=>{document.getElementById(t).classList.toggle("on",t===id);document.getElementById("t-"+t).classList.toggle("on",t===id)});
+ document.getElementById("pgt").textContent=TITLES[id][0];document.getElementById("pgs").textContent=TITLES[id][1];
+ ({dash:renderDash,lots:renderLots,buyers:renderBuyers,add:renderAdd,tools:renderTools}[id])();window.scrollTo(0,0)}
+
+function renderDash(){
+ const L=merged(),{w,mae}=weights(L);const valued=L.filter(l=>smartVal(l,w)!=null);
+ const soldL=L.filter(l=>l.actual!=null);const avgVal=Math.round(mean(valued.map(l=>smartVal(l,w)))||0);
+ const best=Object.keys(mae).sort((a,b)=>mae[a]-mae[b])[0];
+ const k=[["üçÉ",L.length,"Lots tracked",valued.length+" valued"],["üí∞",rs(avgVal),"Avg blended value","accuracy-weighted"],
+  ["‚úÖ",soldL.length,"Lots sold","with real price"],["üéØ",best||"‚Äî","Best predictor",best?("avg miss "+rs(Math.round(mae[best]))):"add sold prices"],
+  ["üìà",rs(DATA.benchmark.BP||"-"),"BP market avg",DATA.meta.auction+" lots"]];
+ let h=`<div class="grid kpis">`+k.map(c=>`<div class="card kpi"><div class="ic">${c[0]}</div><div class="n">${c[1]}</div><div class="l">${c[2]}</div><div class="s">${c[3]}</div></div>`).join("")+`</div>`;
+ /* score every lot vs its market, then GROUP look-alikes so the feed stays varied & decision-ready */
+ const scored=[];L.forEach(l=>{const v=smartVal(l,w),mk=mkFor(l.grade);if(v!=null&&mk)scored.push({l,v,d:(v-mk)/mk*100})});
+ const groupBy=items=>{const m={};items.forEach(o=>{const k=o.l.garden+"|"+o.l.grade;(m[k]=m[k]||[]).push(o)});return Object.values(m)};
+ const al=[];
+ const prem=scored.filter(o=>o.d>12);
+ groupBy(prem).sort((a,b)=>Math.max(...b.map(o=>o.d))-Math.max(...a.map(o=>o.d))).slice(0,4).forEach(g=>{
+  const f=g[0],buyer=bestBuyers(f.l.grade)[0],vs=g.map(o=>o.v),ds=g.map(o=>o.d);
+  const who=buyer?` Hold for <b>${esc(buyer.replace(/\.+$/,""))}</b>.`:" Hold for a premium buyer.";
+  const lo=Math.min(...vs),hi=Math.max(...vs),dlo=Math.min(...ds),dhi=Math.max(...ds);
+  const valStr=lo===hi?rs(lo):`${rs(lo)}‚Äì${rs(hi)}`,pctStr=dlo.toFixed(0)===dhi.toFixed(0)?`${dlo.toFixed(0)}%`:`${dlo.toFixed(0)}‚Äì${dhi.toFixed(0)}%`;
+  if(g.length===1)al.push(["g","üìà",`<b>${f.l.garden} ${f.l.lot}</b> (${f.l.grade}) values <b>${rs(f.v)}</b> ‚Äî ${f.d.toFixed(0)}% over its usual price.${who}`]);
+  else al.push(["g","üìà",`<b>${g.length} ${f.l.garden} ${f.l.grade}</b> lots value <b>${valStr}</b> ‚Äî ${pctStr} over usual.${who}`]);});
+ groupBy(scored.filter(o=>o.d<-12)).sort((a,b)=>Math.min(...a.map(o=>o.d))-Math.min(...b.map(o=>o.d))).slice(0,2).forEach(g=>{
+  const f=g[0];
+  if(g.length===1)al.push(["r","‚ö†Ô∏è",`<b>${f.l.garden} ${f.l.lot}</b> (${f.l.grade}) values <b>${rs(f.v)}</b> ‚Äî ${Math.abs(f.d).toFixed(0)}% below usual. Move it through a volume buyer.`]);
+  else al.push(["r","‚ö†Ô∏è",`<b>${g.length} ${f.l.garden} ${f.l.grade}</b> lots sit below their usual price ‚Äî push these to a volume buyer.`]);});
+ if(best&&mae[best]!=null)al.push(["y","üéØ",`<b>${best}</b> predicts closest (avg miss ${rs(Math.round(mae[best]))}). Trust them most; discount the over-valuers.`]);
+ h+=`<h2 class="sec">‚ö° What needs attention</h2><div class="feed">`+(al.length?al.slice(0,6).map(a=>`<div class="fi ${a[0]}"><div class="fic">${a[1]}</div><div class="ft">${a[2]}</div></div>`).join(""):`<div class="fi y"><div class="fic">üéØ</div><div class="ft">Add sold prices to unlock sharper alerts.</div></div>`)+`</div>`;
+ const gb=Object.entries(DATA.benchmark).sort((a,b)=>b[1]-a[1]).slice(0,8).map(([g,v])=>({label:g,value:v}));
+ const bb=DATA.buyers.slice(0,8).map(b=>({label:b.name,value:b.pkgs}));
+ const acc=TASTERS.filter(t=>mae[t]!=null).map(t=>({label:t,value:Math.round(mae[t])}));
+ h+=`<div class="grid two" style="margin-top:14px">
+  <div class="card"><div class="cardh"><span class="t">Market price by grade</span><span class="d">‚Çπ/kg ¬∑ gold line = Bhatkawa BP</span></div><div class="chartwrap">${vbars(gb,{fmt:rs,marker:DATA.realized.BP,markerLabel:"Bhatkawa "+rs(DATA.realized.BP)})}</div></div>
+  <div class="card"><div class="cardh"><span class="t">Biggest buyers</span><span class="d">by packages</span></div>${hbars(bb)}</div></div>`;
+ h+=`<div class="card" style="margin-top:16px"><div class="cardh"><span class="t">Predictor accuracy</span><span class="d">lower = better (‚Çπ/kg miss)</span></div>${acc.length?hbars(acc,{fmt:rs}):`<p class="hint">No taster has a matched sold price yet ‚Äî add sold prices on the Lots/Add tab.</p>`}</div>`;
+ document.getElementById("dash").innerHTML=h;
+}
+
+let lotSort={k:"lot",dir:1},lotFilter={q:"",garden:"",grade:""};
+function renderLots(){
+ const L=merged();const grades=[...new Set(L.map(l=>l.grade).filter(Boolean))].sort();
+ document.getElementById("lots").innerHTML=`<div class="toolbar">
+  <div class="search"><span>üîé</span><input id="lq" placeholder="search lot or grade" value="${esc(lotFilter.q)}" oninput="lotFilter.q=this.value;drawLots()"></div>
+  <select class="f" style="width:auto" onchange="lotFilter.garden=this.value;drawLots()"><option value="">All gardens</option>${["Bhatkawa","Pahargoomiah"].map(g=>`<option ${lotFilter.garden==g?"selected":""}>${g}</option>`).join("")}</select>
+  <select class="f" style="width:auto" onchange="lotFilter.grade=this.value;drawLots()"><option value="">All grades</option>${grades.map(g=>`<option ${lotFilter.grade==g?"selected":""}>${g}</option>`).join("")}</select>
+  <button class="btn g" onclick="exportCSV()">‚¨á CSV</button></div>
+  <div class="tblcard"><div class="tblscroll"><table id="lotTable"></table></div></div>`;drawLots();
+}
+function drawLots(){
+ const L=merged(),{w}=weights(L);
+ let rows=L.filter(l=>{const q=lotFilter.q.toLowerCase();
+  return(!q||(l.lot+" "+(l.grade||"")).toLowerCase().includes(q))&&(!lotFilter.garden||l.garden===lotFilter.garden)&&(!lotFilter.grade||l.grade===lotFilter.grade)});
+ const k=lotSort.k,dir=lotSort.dir;
+ rows.sort((a,b)=>{let x=k=="blend"?smartVal(a,w):a[k],y=k=="blend"?smartVal(b,w):b[k];x=x==null?-1:x;y=y==null?-1:y;return(x>y?1:x<y?-1:0)*dir});
+ const cols=[["garden","Garden","opt"],["lot","Lot",""],["grade","Grade",""],["jt","J Thomas","opt"],["parcon","Parcon","opt"],["gardenval","Garden","opt"],["blend","Smart value",""],["actual","Sold",""],["reco","Recommendation",""]];
+ let h="<thead><tr>"+cols.map(c=>`<th class="${c[2]}" onclick="sortLots('${c[0]}')">${c[1]}${lotSort.k==c[0]?(lotSort.dir>0?" ‚Üë":" ‚Üì"):""}</th>`).join("")+"</tr></thead><tbody>";
+ for(const l of rows){const v=smartVal(l,w),r=reco(l,w);let diff="";
+  if(l.actual!=null&&v!=null){const d=v-l.actual;diff=d>3?` <span class="diff-o">+${d}</span>`:d<-3?` <span class="diff-u">${d}</span>`:""}
+  h+=`<tr><td class="opt">${l.garden}</td><td class="lotno">${l.lot}</td><td><span class="tag">${l.grade||"‚Äî"}</span></td><td class="opt">${l.jt??"<span class=muted>‚Äî</span>"}</td><td class="opt">${l.parcon??"<span class=muted>‚Äî</span>"}</td><td class="opt">${l.gardenval??"<span class=muted>‚Äî</span>"}</td><td class="val">${v??"‚Äî"}</td><td>${l.actual!=null?l.actual+diff:"<span class=muted>‚Äî</span>"}</td><td><span class="badge ${r.c}">${r.t}</span></td></tr>`}
+ document.getElementById("lotTable").innerHTML=h+"</tbody>";
+}
+function sortLots(k){if(lotSort.k==k)lotSort.dir*=-1;else{lotSort.k=k;lotSort.dir=1}drawLots()}
+
+function renderBuyers(){
+ let h=`<div class="card"><div class="cardh"><span class="t">üéØ Best buyers for a grade</span><span class="d">who pays the most</span></div>
+  <select class="f" id="bgr" style="width:auto;margin:6px 0 4px" onchange="findBuyers()">${Object.keys(DATA.buyersByGrade).sort().map(g=>`<option>${g}</option>`).join("")}</select>
+  <div id="bgout"></div></div>
+  <h2 class="sec">All buyers this auction</h2><div class="tblcard"><div class="tblscroll"><table><thead><tr><th>Buyer</th><th class="opt">Lots</th><th class="opt">Pkgs</th><th>Avg ‚Çπ</th><th class="opt">Range</th><th>Top grade</th></tr></thead><tbody>`;
+ DATA.buyers.forEach(b=>h+=`<tr><td><span class="ava" style="display:inline-grid;vertical-align:middle;margin-right:7px">${initials(b.name)}</span>${esc(b.name)}</td><td class="opt">${b.lots}</td><td class="opt">${b.pkgs}</td><td class="val">${b.avg}</td><td class="opt muted">${b.min}‚Äì${b.max}</td><td><span class="tag">${b.fav}</span></td></tr>`);
+ document.getElementById("buyers").innerHTML=h+`</tbody></table></div></div>`;findBuyers();
+}
+function findBuyers(){const g=document.getElementById("bgr").value,list=DATA.buyersByGrade[g]||[];
+ let h=`<p class="hint" style="margin:4px 0 8px">Market avg for <b>${g}</b>: ${rs(DATA.benchmark[g]||"-")}/kg</p>`+
+  hbars(list.slice(0,8).map(b=>({label:b.name,value:b.avg})),{fmt:rs});
+ if(!list.length)h+=`<p class="hint">Not enough data for ${g}.</p>`;document.getElementById("bgout").innerHTML=h}
+
+function renderAdd(){
+ document.getElementById("add").innerHTML=`<div class="flex">
+  <div class="card"><div class="cardh"><span class="t">‚ûï Add / update a lot</span></div>
+   <p class="hint">Even one taster is fine. Add the sold price later to score predictions.</p>
+   <div class="row"><div><label>Garden</label><select class="f" id="i_garden"><option>Bhatkawa</option><option>Pahargoomiah</option></select></div><div><label>Lot</label><input class="f" id="i_lot" placeholder="761"></div><div><label>Grade</label><input class="f" id="i_grade" placeholder="BP"></div></div>
+   <div class="row"><div><label>J Thomas ‚Çπ</label><input class="f" id="i_jt" type="number"></div><div><label>Parcon ‚Çπ</label><input class="f" id="i_parcon" type="number"></div><div><label>Garden ‚Çπ</label><input class="f" id="i_gardenval" type="number"></div></div>
+   <div class="row"><div><label>Contemporary /30</label><input class="f" id="i_contemp" type="number"></div><div><label>Sold ‚Çπ</label><input class="f" id="i_actual" type="number"></div></div>
+   <div style="margin-top:16px"><button class="btn p" onclick="addLot()">Save lot</button></div></div>
+  <div class="card"><div class="cardh"><span class="t">üìã Paste a whole report</span></div>
+   <p class="hint">Paste any broker/garden report ‚Äî it pulls out lot, grade & price.</p>
+   <div class="row"><div><label>Garden</label><select class="f" id="p_garden"><option>Bhatkawa</option><option>Pahargoomiah</option></select></div><div><label>From taster</label><select class="f" id="p_taster"><option>J Thomas</option><option>Parcon</option><option>Garden</option></select></div></div>
+   <label>Paste here</label><textarea class="f" id="p_text" rows="7" placeholder="C677  BOPSM  340+&#10;C663  BP  360+&#10;C487  BP  300 / 320"></textarea>
+   <div style="margin-top:12px"><button class="btn p" onclick="parsePaste()">Parse</button> <button class="btn g" onclick="document.getElementById('p_out').innerHTML=''">Clear</button></div>
+   <div id="p_out" style="margin-top:12px"></div></div></div>`;
+}
+const val=id=>document.getElementById(id).value;
+const numv=id=>{const x=parseFloat(document.getElementById(id).value);return isNaN(x)?null:x};
+function addLot(){const lot=val("i_lot").trim();if(!lot)return alert("Enter a lot number");
+ const rec={garden:val("i_garden"),lot,grade:val("i_grade").trim().toUpperCase(),jt:numv("i_jt"),parcon:numv("i_parcon"),gardenval:numv("i_gardenval"),contemp:numv("i_contemp"),actual:numv("i_actual")};
+ Object.keys(rec).forEach(k=>{if(rec[k]===null||rec[k]==="")delete rec[k]});
+ const u=userLots().filter(x=>!(x.garden===rec.garden&&x.lot===lot));u.push(rec);saveUser(u);
+ ["i_lot","i_grade","i_jt","i_parcon","i_gardenval","i_contemp","i_actual"].forEach(id=>document.getElementById(id).value="");alert("Saved lot "+lot);go("lots")}
+let pasted=[];
+function parsePaste(){const txt=val("p_text"),garden=val("p_garden"),taster=val("p_taster");
+ const gradeRe=/\b(BOPSM1|BOPSM|BOP|BP1|BP|OF1|OF|PF1|PF|PD|D)\b/i;pasted=[];
+ txt.split(/\n/).forEach(line=>{const gm=line.match(gradeRe);if(!gm)return;const lm=line.match(/\b[CD]?-?0*(\d{3,4})\b/);if(!lm)return;
+  const pp=line.slice(line.indexOf(gm[0])+gm[0].length);const ms=[...pp.matchAll(/(\d{3})\s*\+?/g)].map(m=>+m[1]).filter(n=>n>=80&&n<=900);if(!ms.length)return;
+  pasted.push({garden,lot:lm[1],grade:gm[0].toUpperCase(),taster,price:ms.length>=2?Math.round((ms[0]+ms[1])/2):ms[0]})});
+ const out=document.getElementById("p_out");
+ if(!pasted.length){out.innerHTML='<div class="fi y"><div class="fic">ü§î</div><div class="ft">Couldn\'t find lots. Each line needs a lot number, a grade and a price.</div></div>';return}
+ out.innerHTML=`<div class="fi g"><div class="fic">‚úÖ</div><div class="ft">Found <b>${pasted.length}</b> lots from ${esc(taster)}.</div></div>
+  <div class="tblcard" style="margin-top:8px"><div class="tblscroll" style="max-height:200px"><table><thead><tr><th>Lot</th><th>Grade</th><th>${esc(taster)} ‚Çπ</th></tr></thead><tbody>${pasted.map(p=>`<tr><td class="lotno">${p.lot}</td><td><span class="tag">${p.grade}</span></td><td class="val">${p.price}</td></tr>`).join("")}</tbody></table></div></div>
+  <button class="btn p" style="margin-top:10px" onclick="commitPaste()">Add all ${pasted.length} lots</button>`}
+function commitPaste(){const field={"J Thomas":"jt","Parcon":"parcon","Garden":"gardenval"};let u=userLots();
+ pasted.forEach(p=>{let r=u.find(x=>x.garden===p.garden&&x.lot===p.lot);if(!r){r={garden:p.garden,lot:p.lot,grade:p.grade};u.push(r)}r.grade=r.grade||p.grade;r[field[p.taster]]=p.price});
+ saveUser(u);alert("Added "+pasted.length+" lots");go("lots")}
+
+function renderTools(){
+ document.getElementById("tools").innerHTML=`<div class="flex">
+  <div class="card"><div class="cardh"><span class="t">üßÆ Smart valuation</span></div>
+   <p class="hint">Type the ideas you have ‚Äî it blends them (weighted by who's accurate) vs Bhatkawa's prices.</p>
+   <div class="row"><div><label>Grade</label><input class="f" id="c_grade" placeholder="BP" oninput="calc()"></div><div><label>J Thomas</label><input class="f" id="c_jt" type="number" oninput="calc()"></div><div><label>Parcon</label><input class="f" id="c_parcon" type="number" oninput="calc()"></div><div><label>Garden</label><input class="f" id="c_garden" type="number" oninput="calc()"></div></div>
+   <div id="c_out" style="margin-top:18px"></div></div>
+  <div class="card"><div class="cardh"><span class="t">üíæ Backup & restore</span></div>
+   <p class="hint">Your typed-in data lives in this browser. Back it up or move it to another computer.</p>
+   <button class="btn p" onclick="exportJSON()">‚¨á Download my data</button>
+   <div style="margin-top:14px"><label>Restore from a backup</label><input class="f" type="file" id="imp" accept=".json" onchange="importJSON(event)"></div>
+   <div style="margin-top:16px"><button class="btn g" onclick="resetAll()">üóë Clear my added data</button></div>
+   <p class="hint" style="margin-top:14px">New broker files? Drop them in <b>Downloads</b> and re-run <code>build_webapp.py</code>.</p></div></div>`;calc()}
+function calc(){const L=merged(),{w}=weights(L);
+ const fake={grade:val("c_grade").trim().toUpperCase(),jt:numv("c_jt"),parcon:numv("c_parcon"),gardenval:numv("c_garden")};
+ const v=smartVal(fake,w),out=document.getElementById("c_out");
+ if(v==null){out.innerHTML='<span class="hint">Enter at least one price idea.</span>';return}
+ const mk=mkFor(fake.grade);let cmp="",buy="";
+ if(mk){const d=v-mk;cmp=`<div class="hint" style="margin-top:8px">Bhatkawa usually gets <b>${rs(mk)}</b> for ${fake.grade} ‚Üí this is <b class="${d>=0?'diff-u':'diff-o'}">${d>=0?"+"+d+" above":d+" below"}</b>.</div>`;
+  const bb=bestBuyers(fake.grade);if(bb.length)buy=`<div class="hint" style="margin-top:6px">üéØ Likely buyers: <b>${bb.map(esc).join(", ")}</b></div>`}
+ out.innerHTML=`<div class="big">${rs(v)}<span style="font-size:16px;color:var(--muted)">/kg</span></div><div class="hint">accuracy-weighted blend</div>${cmp}${buy}`}
+function exportJSON(){dl(JSON.stringify(userLots(),null,2),"bhatkawa-tea-data.json","application/json")}
+function exportCSV(){const L=merged(),{w}=weights(L);const rows=[["Garden","Lot","Grade","JThomas","Parcon","GardenVal","SmartValue","Sold"]];
+ L.forEach(l=>rows.push([l.garden,l.lot,l.grade||"",l.jt??"",l.parcon??"",l.gardenval??"",smartVal(l,w)??"",l.actual??""]));dl(rows.map(r=>r.join(",")).join("\n"),"bhatkawa-lots.csv","text/csv")}
+function dl(t,n,ty){const b=new Blob([t],{type:ty}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=n;a.click()}
+function importJSON(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(Array.isArray(d)){saveUser(d);alert("Restored "+d.length+" lots");go("lots")}else alert("Not a valid backup")}catch(x){alert("Couldn't read file")}};r.readAsText(f)}
+function resetAll(){if(confirm("Clear the lots YOU added? (original data stays)")){localStorage.removeItem(KEY);go("dash")}}
+function toggleTheme(){const d=document.documentElement.getAttribute("data-theme")=="dark";document.documentElement.setAttribute("data-theme",d?"light":"dark");document.getElementById("tglb").textContent=d?"üåô Dark":"‚òÄÔ∏è Light";localStorage.setItem("tea_theme",d?"light":"dark")}
+if(localStorage.getItem("tea_theme")=="dark")toggleTheme();
+renderDash();
+</script></body></html>
